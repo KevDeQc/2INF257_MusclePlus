@@ -3,25 +3,49 @@ package com.example.musclepluscompose
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import androidx.room.Room
 import com.example.musclepluscompose.ui.theme.MusclePlusComposeTheme
 import kotlinx.coroutines.launch
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
+import com.example.musclepluscompose.data.AppDatabase
+import com.example.musclepluscompose.data.workoutModel.WorkoutViewModel
+
 
 class MainActivity : ComponentActivity() {
 
     lateinit var navController: NavHostController
+
+    private val db by lazy {
+        Room.databaseBuilder(
+            applicationContext,
+            AppDatabase::class.java,
+            "workout.db"
+        ).build()
+    }
+
+    private val viewModel by viewModels<WorkoutViewModel>(
+        factoryProducer = {
+            object : ViewModelProvider.Factory{
+                override fun <T : ViewModel> create(modelClass: Class<T>) : T{
+                    return WorkoutViewModel(db.dao) as T
+                }
+            }
+        }
+    )
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -84,10 +108,13 @@ class MainActivity : ComponentActivity() {
                             })
                     }
                 ) {
+
                     contentPadding ->
                     Box(modifier = Modifier.fillMaxSize()){
-                        SetupNavGraph(navController = navController)
+                        val state by viewModel.state.collectAsState()
+                        SetupNavGraph(navController = navController, workoutState = state, onEvent = viewModel::onEvent)
                     }
+
                 }
             }
         }
