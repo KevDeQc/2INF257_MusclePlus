@@ -20,4 +20,10 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
 
     }
 
+    fun deleteWorkout(workout: Workout){
+        viewModelScope.launch {
+            workoutDao.delete(workout)
+        }
+    }
+
 }

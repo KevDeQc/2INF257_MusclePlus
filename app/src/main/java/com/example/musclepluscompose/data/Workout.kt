@@ -6,9 +6,9 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "workouts")
 data class Workout(
 
-    @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val name: String,
     val desc : String,
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,
 
     //val exerciseList: MutableList<Exercise>
 
