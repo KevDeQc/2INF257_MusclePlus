@@ -4,12 +4,11 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.musclepluscompose.data.workoutModel.WorkoutEvent
-import com.example.musclepluscompose.data.workoutModel.WorkoutState
+import com.example.musclepluscompose.data.AppViewModel
 
 @Composable
-fun SetupNavGraph(navController: NavHostController, workoutState: WorkoutState, onEvent : (WorkoutEvent) -> Unit
-) {
+fun SetupNavGraph(navController: NavHostController, viewModel: AppViewModel)
+ {
     NavHost(
         navController = navController,
         startDestination = Screen.Home.route
@@ -27,7 +26,7 @@ fun SetupNavGraph(navController: NavHostController, workoutState: WorkoutState, 
         composable(
             route = Screen.Workout.route
         ){
-            WorkoutScreen(state = workoutState, onEvent = onEvent)
+            WorkoutScreen(viewModel)
         }
         composable(
             route = Screen.Stats.route
