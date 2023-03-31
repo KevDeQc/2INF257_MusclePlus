@@ -1,5 +1,6 @@
 package com.example.musclepluscompose
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -97,6 +98,12 @@ class MainActivity : ComponentActivity() {
                                     contentDescription = "Go to stats screen",
                                     icon = Icons.Default.Home
                                 ),
+                                MenuItem(
+                                    id = "startWorkout",
+                                    title = "Start Workout",
+                                    contentDescription = "Go to start workout activity",
+                                    icon = Icons.Default.Home
+                                )
                             ) ,
                             onItemClick = {
                                 when(it.id){
@@ -104,6 +111,7 @@ class MainActivity : ComponentActivity() {
                                     "exercise" -> navController.navigate(route = Screen.Exercise.route)
                                     "workout" -> navController.navigate(route = Screen.Workout.route)
                                     "stats" -> navController.navigate(route = Screen.Stats.route)
+                                    "startWorkout" -> startWorkoutActivity()
                                 }
                             })
                     }
@@ -120,6 +128,12 @@ class MainActivity : ComponentActivity() {
 
                 }
             }
+        }
+    }
+
+    private fun startWorkoutActivity() {
+        val intent = Intent(this, WorkoutTracker::class.java).also {
+            startActivity(it)
         }
     }
 }
