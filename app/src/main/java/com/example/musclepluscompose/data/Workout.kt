@@ -10,6 +10,5 @@ data class Workout(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
     val desc : String,
-    //val exerciseList: MutableList<Exercise>
 
 )
