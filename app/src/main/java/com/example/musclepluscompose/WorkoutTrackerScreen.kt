@@ -1,5 +1,6 @@
 package com.example.musclepluscompose
 
+import android.content.Intent
 import android.graphics.Color
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -13,6 +14,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat.startActivity
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable

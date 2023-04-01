@@ -132,7 +132,7 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun startWorkoutActivity() {
-        val intent = Intent(this, WorkoutTracker::class.java).also {
+        Intent(this, WorkoutTracker::class.java).also {
             startActivity(it)
         }
     }
