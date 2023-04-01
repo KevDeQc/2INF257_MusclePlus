@@ -44,6 +44,12 @@ interface WorkoutDao{
 
     @Delete
     suspend fun delete(workout: Workout)
+
+    @Update(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun update(workout: Workout)
+
+    @Upsert()
+    suspend fun upsert(workout: Workout)
 }
 
 @Dao

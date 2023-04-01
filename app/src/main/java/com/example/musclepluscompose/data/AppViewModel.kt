@@ -26,4 +26,16 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    fun updateWorkout(workout: Workout){
+        viewModelScope.launch {
+            workoutDao.update(workout)
+        }
+    }
+
+    fun upsertWorkout(workout: Workout){
+        viewModelScope.launch {
+            workoutDao.upsert(workout)
+        }
+    }
+
 }
