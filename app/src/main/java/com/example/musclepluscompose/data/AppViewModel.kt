@@ -9,7 +9,7 @@ import kotlinx.coroutines.launch
 class AppViewModel(application: Application) : AndroidViewModel(application) {
 
     private val workoutDao = AppDatabase.getDatabase(application).workoutDao()
-    //private val exerciseDao = AppDatabase.getDatabase(application).exerciseDao()
+    private val exerciseDao = AppDatabase.getDatabase(application).exerciseDao()
 
     val allWorkout: Flow<List<Workout>> = workoutDao.getAll()
 
@@ -37,5 +37,36 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
             workoutDao.upsert(workout)
         }
     }
+
+//-------- Exercise -------
+
+    val allExercise: Flow<List<Exercise>> = exerciseDao.getAll()
+
+    fun insertExercise(exercise: Exercise){
+        viewModelScope.launch {
+            exerciseDao.insert(exercise)
+        }
+    }
+
+    fun deleteExercise(exercise: Exercise){
+        viewModelScope.launch {
+            exerciseDao.delete(exercise)
+        }
+    }
+
+    fun updateExercise(exercise: Exercise){
+        viewModelScope.launch{
+            exerciseDao.update(exercise)
+        }
+    }
+
+    fun upsertExercise(exercise: Exercise){
+        viewModelScope.launch {
+            exerciseDao.upsert(exercise)
+        }
+    }
+
+
+
 
 }

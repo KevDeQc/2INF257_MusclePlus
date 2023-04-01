@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.Flow
     version = 1
 
 )
+@TypeConverters(Converters::class)
 abstract class AppDatabase: RoomDatabase() {
 
     abstract fun workoutDao(): WorkoutDao
@@ -58,7 +59,16 @@ interface ExerciseDao{
     @Query("SELECT * FROM exercises")
     fun getAll(): Flow<List<Exercise>>
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(exercise: Exercise)
+
+    @Delete
+    suspend fun delete(exercise: Exercise)
+
+    @Update(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun update(exercise: Exercise)
+
+    @Upsert()
+    suspend fun upsert(exercise: Exercise)
 
 }

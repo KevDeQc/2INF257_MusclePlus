@@ -8,26 +8,29 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.compose.ui.window.Dialog
 import com.example.musclepluscompose.data.AppViewModel
+import com.example.musclepluscompose.data.Exercise
 import com.example.musclepluscompose.data.Workout
-import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
 
 
 @Composable
 fun WorkoutScreen(viewModel: AppViewModel) {
-    val workouts by viewModel.allWorkout.collectAsState(emptyList())
+    val allWorkouts by viewModel.allWorkout.collectAsState(emptyList())
+    val allExercises by viewModel.allExercise.collectAsState(emptyList())
     var isEditing by remember { mutableStateOf(false) }
 
     var selectedWorkout by remember { mutableStateOf<Workout?>(null) }
@@ -42,14 +45,19 @@ fun WorkoutScreen(viewModel: AppViewModel) {
                 onSave = { modifiedWorkout ->
                     viewModel.upsertWorkout(modifiedWorkout)
                     isEditing = false
-                })
+                },
+            allExercises = allExercises, viewModel)
         } else {
-            EditWorkoutScreen(workout = Workout("", ""),
+            val emptyList = mutableListOf<Exercise>()
+            EditWorkoutScreen(workout = Workout("", "", emptyList),
                 onDismiss = { isEditing = false },
                 onSave = { modifiedWorkout ->
                     viewModel.upsertWorkout(modifiedWorkout)
                     isEditing = false
-                })
+                },
+            allExercises = allExercises,
+                viewModel
+            )
         }
     } else {
         Box(
@@ -61,7 +69,7 @@ fun WorkoutScreen(viewModel: AppViewModel) {
                 modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.spacedBy(5.dp)
             ) {
-                items(workouts) { workout ->
+                items(allWorkouts) { workout ->
                     Row(
                         modifier = Modifier
                             .fillMaxSize()
@@ -112,60 +120,208 @@ fun WorkoutScreen(viewModel: AppViewModel) {
 fun EditWorkoutScreen(
     workout: Workout,
     onDismiss: () -> Unit,
-    onSave: (Workout) -> Unit
+    onSave: (Workout) -> Unit,
+    allExercises: List<Exercise>,
+    viewModel: AppViewModel
 ) {
     var name by remember { mutableStateOf(TextFieldValue(workout.name)) }
     var desc by remember { mutableStateOf(TextFieldValue(workout.desc)) }
+    var isAddingExercise by remember { mutableStateOf(false) }
+    var exerciseInWorkout by remember { mutableStateOf(listOf<Exercise>()) }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(
-            text = "Edit Workout",
-            fontSize = 20.sp,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(vertical = 16.dp)
-        )
-        Text(
-            text = "Workout name",
-            modifier = Modifier.padding(vertical = 5.dp)
-        )
-        TextField(
-            value = name,
-            onValueChange = { newName -> name = newName },
-            modifier = Modifier.fillMaxWidth()
-        )
-        Text(
-            text = "Workout description",
-            modifier = Modifier.padding(vertical = 5.dp)
-        )
-        TextField(
-            value = desc,
-            onValueChange = { newDesc -> desc = newDesc },
-            modifier = Modifier.fillMaxWidth()
-        )
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.End,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Button(
-                onClick = onDismiss,
-                modifier = Modifier.padding(end = 16.dp)
+    exerciseInWorkout = workout.exercise
+
+
+    if(isAddingExercise){
+        //ChooseExercise(onDismiss = {isAddingExercise = false}, allExercises, currentExercise)
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ){
+            Text(text = "Exercises:")
+            LazyColumn(
+                verticalArrangement = Arrangement.spacedBy(5.dp)
             ) {
-                Text("Cancel")
-            }
-            Button(
-                onClick = {
-                    onSave(workout.copy(name = name.text, desc = desc.text))
+                items(allExercises) { exercise ->
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text(text = exercise.name)
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(text = exercise.desc)
+                        IconButton(onClick = { workout.exercise.add(exercise)
+                            isAddingExercise = false }) {
+                            Icon(
+                                modifier = Modifier.fillMaxSize(),
+                                imageVector = Icons.Filled.Add,
+                                contentDescription = "Add"
+                            )
+                        }
+                    }
                 }
+            }
+
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Button(onClick = { isAddingExercise = false}, ) {
+                    Text(text = "Cancel")
+                }
+            }
+
+        }
+    }
+    else{
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = "Edit Workout",
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(vertical = 16.dp)
+            )
+            Text(
+                text = "Workout name",
+                modifier = Modifier.padding(vertical = 5.dp)
+            )
+            TextField(
+                value = name,
+                onValueChange = { newName -> name = newName },
+                modifier = Modifier.fillMaxWidth()
+            )
+            Text(
+                text = "Workout description",
+                modifier = Modifier.padding(vertical = 5.dp)
+            )
+            TextField(
+                value = desc,
+                onValueChange = { newDesc -> desc = newDesc },
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            Text(text = "Exercises:")
+            LazyColumn(
+                verticalArrangement = Arrangement.spacedBy(5.dp)
             ) {
-                Text("Save")
+                val mutableExerciseList = exerciseInWorkout.toMutableList()
+                items(mutableExerciseList) { exercise ->
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text(text = exercise.name)
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(text = exercise.desc)
+
+                        IconButton(onClick = { mutableExerciseList.remove(exercise)
+                        exerciseInWorkout = mutableExerciseList.toList()}) {
+                            Icon(
+                                modifier = Modifier.fillMaxSize(),
+                                imageVector = Icons.Filled.Delete,
+                                contentDescription = "delete"
+                            )
+                        }
+                    }
+                }
+            }
+
+            Button(onClick = {
+                isAddingExercise = true
+            }) {
+                Text(text = "Add exercise")
+            }
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.End,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Button(
+                    onClick = onDismiss,
+                    modifier = Modifier.padding(end = 16.dp)
+                ) {
+                    Text("Cancel")
+                }
+                Button(
+                    onClick = {
+                        onSave(workout.copy(name = name.text, desc = desc.text, exercise = exerciseInWorkout.toMutableList()))
+                    }
+                ) {
+                    Text("Save")
+                }
             }
         }
     }
+}
+
+@Composable
+fun ChooseExercise1(
+    onDismiss: () -> Unit,
+    allExercises: List<Exercise>,
+    selectedExercises: MutableList<Exercise>
+) {
+    var searchText by remember { mutableStateOf("") }
+    val filteredExercises = allExercises.filter {
+        it.name.contains(searchText, ignoreCase = true) ||
+                it.desc.contains(searchText, ignoreCase = true)
+    }
+
+
+
+    Dialog(
+        onDismissRequest = onDismiss,
+        content = {
+            Column(
+                modifier = Modifier.padding(16.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                TextField(
+                    value = searchText,
+                    onValueChange = { searchText = it },
+                    label = { Text("Search") },
+                    modifier = Modifier.fillMaxWidth()
+                )
+                LazyColumn(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    items(filteredExercises) { exercise ->
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Checkbox(
+                                checked = selectedExercises.contains(exercise),
+                                onCheckedChange = {
+                                    if (it) {
+                                        selectedExercises.add(exercise)
+                                    } else {
+                                        selectedExercises.remove(exercise)
+                                    }
+                                }
+                            )
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Column {
+                                Text(text = exercise.name)
+                                Text(text = exercise.desc)
+                            }
+                        }
+                    }
+                }
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End
+                ) {
+                    Button(onClick = onDismiss, modifier = Modifier.padding(end = 8.dp)) {
+                        Text(text = "Cancel")
+                    }
+                    Button(
+                        onClick = onDismiss,
+                        enabled = selectedExercises.isNotEmpty()
+                    ) {
+                        Text(text = "Add")
+                    }
+                }
+            }
+        }
+    )
 }
 
