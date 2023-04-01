@@ -5,11 +5,13 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -63,21 +65,37 @@ fun WorkoutTrackerScreen() {
             val exercise = exerciseList[indexExercise]
             Text(exercise.name)
 
-            LazyColumn(modifier = Modifier.heightIn(max = 200.dp)) {
+            LazyColumn(modifier = Modifier.heightIn(max = 1000.dp)) {
                 items(exercise.exerciseItems.size){ indexSet ->
                     val sets = exercise.exerciseItems[indexSet]
                     Row {
                         TextField(
-                            value = sets.rep.toString(),
-                            onValueChange = { /* TODO */ },
+                            value = sets.rep.takeIf { it > 0 }?.toString() ?: "",
+                            onValueChange = { newValue ->
+                                val newSets = sets.copy(rep = newValue.takeIf { it.isNotEmpty() }?.toIntOrNull() ?: 0)
+                                val newExerciseItems = exercise.exerciseItems.toMutableList()
+                                newExerciseItems[indexSet] = newSets
+                                val newExerciseList = exerciseList.toMutableList()
+                                newExerciseList[indexExercise] = exercise.copy(exerciseItems = newExerciseItems)
+                                setExerciseList(newExerciseList)
+                            },
                             label = { Text("Rep") },
+                            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
                             modifier = Modifier.weight(1f)
                         )
                         Spacer(Modifier.width(8.dp))
                         TextField(
-                            value = sets.weight.toString(),
-                            onValueChange = { /* TODO */ },
+                            value = sets.weight.takeIf { it > 0 }?.toString() ?: "",
+                            onValueChange = { newValue ->
+                                val newSets = sets.copy(weight = newValue.takeIf { it.isNotEmpty() }?.toIntOrNull() ?: 0)
+                                val newExerciseItems = exercise.exerciseItems.toMutableList()
+                                newExerciseItems[indexSet] = newSets
+                                val newExerciseList = exerciseList.toMutableList()
+                                newExerciseList[indexExercise] = exercise.copy(exerciseItems = newExerciseItems)
+                                setExerciseList(newExerciseList)
+                            },
                             label = { Text("Weight") },
+                            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
                             modifier = Modifier.weight(1f)
                         )
                     }
