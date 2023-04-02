@@ -8,13 +8,11 @@ import com.example.musclepluscompose.data.workoutModel.WorkoutEvent
 import com.example.musclepluscompose.data.workoutModel.WorkoutState
 import com.example.musclepluscompose.data.exerciseModel.ExerciseEvent
 import com.example.musclepluscompose.data.exerciseModel.ExerciseState
+import com.example.musclepluscompose.data.AppViewModel
 
 @Composable
-fun SetupNavGraph(
-    navController: NavHostController,
-    workoutState: WorkoutState,
-    workoutOnEvent : (WorkoutEvent) -> Unit
-) {
+fun SetupNavGraph(navController: NavHostController, viewModel: AppViewModel)
+ {
     NavHost(
         navController = navController,
         startDestination = Screen.Home.route
@@ -27,12 +25,12 @@ fun SetupNavGraph(
         composable(
             route = Screen.Exercise.route
         ){
-            ExerciseScreen()
+            ExerciseScreen(viewModel)
         }
         composable(
             route = Screen.Workout.route
         ){
-            WorkoutScreen(state = workoutState, onEvent = workoutOnEvent)
+            WorkoutScreen(viewModel)
         }
         composable(
             route = Screen.Stats.route
