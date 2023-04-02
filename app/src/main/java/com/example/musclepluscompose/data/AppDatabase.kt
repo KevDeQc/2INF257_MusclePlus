@@ -1,25 +1,21 @@
 package com.example.musclepluscompose.data
 
-<<<<<<< HEAD
+
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-=======
+
 import android.content.Context
 import androidx.room.*
 import kotlinx.coroutines.flow.Flow
->>>>>>> 1a72b476d60970d0993beb2e03413289f30de7df
+
 
 @Database(
     entities = [Workout::class, Exercise::class, Workout_List::class, Workout_Done::class, Exercise_Done::class],
     version = 1
 
 )
-<<<<<<< HEAD
-@TypeConverters(DateConverter::class)
-=======
-@TypeConverters(Converters::class)
->>>>>>> 1a72b476d60970d0993beb2e03413289f30de7df
+@TypeConverters(DateConverter::class, Converters::class)
 abstract class AppDatabase: RoomDatabase() {
 
     abstract fun workoutDao(): WorkoutDao
