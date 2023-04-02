@@ -4,10 +4,6 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.musclepluscompose.data.workoutModel.WorkoutEvent
-import com.example.musclepluscompose.data.workoutModel.WorkoutState
-import com.example.musclepluscompose.data.exerciseModel.ExerciseEvent
-import com.example.musclepluscompose.data.exerciseModel.ExerciseState
 import com.example.musclepluscompose.data.AppViewModel
 
 @Composable

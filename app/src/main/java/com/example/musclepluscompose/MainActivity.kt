@@ -22,14 +22,14 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import com.example.musclepluscompose.data.AppDatabase
-import com.example.musclepluscompose.data.exerciseModel.ExerciseViewModel
-import com.example.musclepluscompose.data.workoutModel.WorkoutViewModel
 import com.example.musclepluscompose.data.AppViewModel
 
 
 class MainActivity : ComponentActivity() {
 
     lateinit var navController: NavHostController
+
+    private val viewModel by viewModels<AppViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -102,11 +102,6 @@ class MainActivity : ComponentActivity() {
 
                     contentPadding ->
                     Box(modifier = Modifier.fillMaxSize()){
-                        val workoutState by workoutViewModel.state.collectAsState()
-                        SetupNavGraph(
-                            navController = navController,
-                            workoutState = workoutState,
-                            workoutOnEvent = workoutViewModel::onEvent)
                         SetupNavGraph(navController = navController, viewModel)
                     }
 
