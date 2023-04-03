@@ -18,10 +18,35 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat.startActivity
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun WorkoutTrackerScreen() {
+
+    var elapsedTimeInSeconds by remember { mutableStateOf(0) }
+    val scope = rememberCoroutineScope()
+
+    fun formatElapsedTime(elapsedTimeInSeconds: Int): String {
+        val minutes = elapsedTimeInSeconds / 60
+        val seconds = elapsedTimeInSeconds % 60
+        return "%02d:%02d".format(minutes, seconds)
+    }
+
+    DisposableEffect(scope) {
+        onDispose {
+            scope.cancel()
+        }
+    }
+
+    LaunchedEffect(true) {
+        while (true) {
+            delay(1000)
+            elapsedTimeInSeconds += 1
+        }
+    }
+
 
     // Debugging
     var exerciseList by remember { mutableStateOf(mutableListOf(
@@ -66,9 +91,9 @@ fun WorkoutTrackerScreen() {
             width = 300.dp,
             height = 2000.dp
         )) {
-        item() {
+        item {
             Text(
-                text = "Timer: 00:00",
+                text = "Timer: ${formatElapsedTime(elapsedTimeInSeconds)}",
                 fontSize = 36.sp,
                 fontWeight = FontWeight.Bold
             )
@@ -123,6 +148,20 @@ fun WorkoutTrackerScreen() {
             }) {
                 Text("Add Set")
             }
+        }
+        item {
+            Text(
+                text = "Commentaire",
+                fontSize = 26.sp,
+                fontWeight = FontWeight.Bold,
+            )
+        }
+        item {
+            TextField(
+                value = "",
+                onValueChange = { /* handle value change */ },
+                label = { Text("Commentaire") },
+            )
         }
     }
 }
