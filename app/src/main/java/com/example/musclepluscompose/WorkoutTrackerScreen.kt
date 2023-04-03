@@ -11,9 +11,12 @@ import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat.startActivity
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -63,9 +66,20 @@ fun WorkoutTrackerScreen() {
             width = 300.dp,
             height = 2000.dp
         )) {
+        item() {
+            Text(
+                text = "Timer: 00:00",
+                fontSize = 36.sp,
+                fontWeight = FontWeight.Bold
+            )
+        }
         items(exerciseList.size) { indexExercise ->
             val exercise = exerciseList[indexExercise]
-            Text(exercise.name)
+            Text(
+                exercise.name,
+                fontSize = 26.sp,
+                fontWeight = FontWeight.Bold
+            )
 
             LazyColumn(modifier = Modifier.heightIn(max = 1000.dp)) {
                 items(exercise.exerciseItems.size){ indexSet ->
