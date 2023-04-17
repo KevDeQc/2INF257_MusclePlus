@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.sp
 import com.example.musclepluscompose.data.AppViewModel
 import com.example.musclepluscompose.data.Exercise
 import com.example.musclepluscompose.data.Workout
+import com.example.musclepluscompose.ui.theme.MuscleBlue
 
 @Composable
 fun ExerciseScreen(viewModel: AppViewModel) {
@@ -152,16 +153,25 @@ fun EditExerciseScreen(
             horizontalArrangement = Arrangement.End,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Button(
+            Button( // Cancel btn
                 onClick = onDismiss,
-                modifier = Modifier.padding(end = 16.dp)
+                modifier = Modifier.padding(end = 16.dp),
+                colors = ButtonDefaults.buttonColors(
+                    backgroundColor = MuscleBlue,
+                    contentColor = MaterialTheme.colors.onPrimary // White
+                )
             ) {
                 Text("Cancel")
             }
-            Button(
+            Button( // Save btn
+                colors = ButtonDefaults.buttonColors(
+                    backgroundColor = MuscleBlue,
+                    contentColor = MaterialTheme.colors.onPrimary // White
+                ),
                 onClick = {
                     onSave(exercise.copy(name = name.text, desc = desc.text))
                 }
+
             ) {
                 Text("Save")
             }

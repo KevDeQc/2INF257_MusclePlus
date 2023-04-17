@@ -25,6 +25,7 @@ import androidx.compose.ui.window.Dialog
 import com.example.musclepluscompose.data.AppViewModel
 import com.example.musclepluscompose.data.Exercise
 import com.example.musclepluscompose.data.Workout
+import com.example.musclepluscompose.ui.theme.MuscleBlue
 
 
 @Composable
@@ -162,7 +163,14 @@ fun EditWorkoutScreen(
             }
 
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Button(onClick = { isAddingExercise = false}, ) {
+                Button( // Excercice add cancel btn
+                    onClick = { isAddingExercise = false},
+                    colors = ButtonDefaults.buttonColors(
+                        backgroundColor = MuscleBlue,
+                        contentColor = MaterialTheme.colors.onPrimary // White
+                    )
+                )
+                {
                     Text(text = "Cancel")
                 }
             }
@@ -224,7 +232,12 @@ fun EditWorkoutScreen(
                 }
             }
 
-            Button(onClick = {
+            Button( // Add exercice btn
+                colors = ButtonDefaults.buttonColors(
+                    backgroundColor = MuscleBlue,
+                    contentColor = MaterialTheme.colors.onPrimary // White
+                ),
+                onClick = {
                 isAddingExercise = true
             }) {
                 Text(text = "Add exercise")
@@ -235,13 +248,21 @@ fun EditWorkoutScreen(
                 horizontalArrangement = Arrangement.End,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Button(
+                Button( // ???
                     onClick = onDismiss,
-                    modifier = Modifier.padding(end = 16.dp)
+                    modifier = Modifier.padding(end = 16.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        backgroundColor = MuscleBlue,
+                        contentColor = MaterialTheme.colors.onPrimary // White
+                    )
                 ) {
                     Text("Cancel")
                 }
-                Button(
+                Button( // Workout save btn
+                    colors = ButtonDefaults.buttonColors(
+                        backgroundColor = MuscleBlue,
+                        contentColor = MaterialTheme.colors.onPrimary // White
+                    ),
                     onClick = {
                         onSave(workout.copy(name = name.text, desc = desc.text, exercise = exerciseInWorkout.toMutableList()))
                     }
@@ -310,11 +331,23 @@ fun ChooseExercise1(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.End
                 ) {
-                    Button(onClick = onDismiss, modifier = Modifier.padding(end = 8.dp)) {
+                    Button( // Exercice add cancel btn
+                        onClick = onDismiss,
+                        modifier = Modifier.padding(end = 8.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            backgroundColor = MuscleBlue,
+                            contentColor = MaterialTheme.colors.onPrimary // White
+                        )
+                    )
+                    {
                         Text(text = "Cancel")
                     }
-                    Button(
+                    Button( // Exercice add btn
                         onClick = onDismiss,
+                        colors = ButtonDefaults.buttonColors(
+                            backgroundColor = MuscleBlue,
+                            contentColor = MaterialTheme.colors.onPrimary // White
+                        ),
                         enabled = selectedExercises.isNotEmpty()
                     ) {
                         Text(text = "Add")

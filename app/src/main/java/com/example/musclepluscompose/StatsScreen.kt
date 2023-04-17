@@ -9,6 +9,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.musclepluscompose.ui.theme.MuscleBlue
 
 @Composable
 fun StatsScreen() {
@@ -17,7 +18,7 @@ fun StatsScreen() {
     ){
         Text(
             text = "Stats",
-            color = MaterialTheme.colors.primary,
+            color = MuscleBlue,
             fontSize = MaterialTheme.typography.h3.fontSize,
             fontWeight = FontWeight.Bold
         )

@@ -7,9 +7,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.Button
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -18,6 +16,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat.startActivity
+import com.example.musclepluscompose.ui.theme.MuscleBlue
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 
@@ -143,9 +142,14 @@ fun WorkoutTrackerScreen() {
                 }
             }
 
-            Button(onClick = {
-                addItem(indexExercise, weight = 0, rep = 0)
-            }) {
+            Button(
+                onClick = { addItem(indexExercise, weight = 0, rep = 0) },
+                colors = ButtonDefaults.buttonColors(
+                    backgroundColor = MuscleBlue,
+                    contentColor = MaterialTheme.colors.onPrimary // White
+                )
+            )
+            {
                 Text("Add Set")
             }
         }

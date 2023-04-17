@@ -7,15 +7,14 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.Button
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.room.Room
 import com.example.musclepluscompose.data.AppDatabase
+import com.example.musclepluscompose.ui.theme.MuscleBlue
 
 class WorkoutTracker : ComponentActivity() {
 
@@ -25,7 +24,14 @@ class WorkoutTracker : ComponentActivity() {
             WorkoutTrackerScreen()
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 Box(modifier = Modifier.align(Alignment.BottomCenter)) {
-                    Button(onClick = { FinishWorkout() }) {
+                    Button(
+                        onClick = { FinishWorkout() },
+                        colors = ButtonDefaults.buttonColors(
+                            backgroundColor = MuscleBlue,
+                            contentColor = MaterialTheme.colors.onPrimary // White
+                        ),
+                    )
+                    {
                         Text("Finish Workout")
                     }
                 }
