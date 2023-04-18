@@ -21,7 +21,8 @@ class WorkoutTracker : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            WorkoutTrackerScreen()
+            SelectWorkoutScreen()
+            //WorkoutTrackerScreen()
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 Box(modifier = Modifier.align(Alignment.BottomCenter)) {
                     Button(

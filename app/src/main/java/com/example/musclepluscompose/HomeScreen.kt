@@ -12,10 +12,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.musclepluscompose.ui.theme.MuscleBlue
+import androidx.compose.material.*
+import androidx.compose.runtime.*
+import com.example.musclepluscompose.data.AppViewModel
 
 @Composable
 fun HomeScreen() {
-
 
     Column(
         modifier = Modifier.fillMaxSize(),

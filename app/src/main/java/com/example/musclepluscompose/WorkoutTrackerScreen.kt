@@ -16,13 +16,83 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat.startActivity
+import com.example.musclepluscompose.data.AppViewModel
 import com.example.musclepluscompose.ui.theme.MuscleBlue
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalFoundationApi::class)
+
 @Composable
-fun WorkoutTrackerScreen() {
+fun SelectWorkoutScreen()
+{
+
+    var isWorkingOut by remember { mutableStateOf(false) }
+    var expanded by remember { mutableStateOf(false) }
+    var selectedItem by remember { mutableStateOf("Item 1") }
+    val items = listOf("Item 1", "Item 2", "Item 3", "Item 4")
+    //viewModel: AppViewModel
+    //val allWorkouts by viewModel.allWorkout.collectAsState(emptyList())
+
+    if(isWorkingOut)
+    {
+        WorkoutTrackerScreen()
+    }
+    else
+    {
+        Column {
+            Text(
+                text = "Workout: $selectedItem",
+                modifier = Modifier.padding(16.dp)
+            )
+
+            Box(modifier = Modifier.wrapContentSize(Alignment.TopStart)) {
+                Button(
+                    onClick = { expanded = true },
+                    colors = ButtonDefaults.buttonColors(
+                        backgroundColor = MuscleBlue,
+                        contentColor = MaterialTheme.colors.onPrimary // White
+                    ),
+                )
+                {
+                    Text(text = "Select a workout")
+                }
+
+                DropdownMenu(
+                    expanded = expanded,
+                    onDismissRequest = { expanded = false },
+                    modifier = Modifier.width(IntrinsicSize.Max)
+                ) {
+                    items.forEach { item ->
+                        DropdownMenuItem(onClick = {
+                            selectedItem = item
+                            expanded = false
+                        }) {
+                            Text(text = item)
+                        }
+                    }
+                }
+
+                Row{
+                    Button(
+                        onClick = { isWorkingOut = true },
+                        colors = ButtonDefaults.buttonColors(
+                            backgroundColor = MuscleBlue,
+                            contentColor = MaterialTheme.colors.onPrimary // White
+                        ),
+                    )
+                    {
+                        Text(text = "GO")
+                    }
+                }
+            }
+        }
+    }
+
+}
+
+@Composable
+fun WorkoutTrackerScreen() { // WE WILL MAKE IT SO IT PASS A WORKOUT AS PARAMETER TO DISPLAY EACH OF HIS EXERCICES
 
     var elapsedTimeInSeconds by remember { mutableStateOf(0) }
     val scope = rememberCoroutineScope()
