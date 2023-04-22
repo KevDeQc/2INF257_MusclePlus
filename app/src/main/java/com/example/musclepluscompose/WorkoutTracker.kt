@@ -50,6 +50,9 @@ class WorkoutTracker : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+
+            val serviceIntent = Intent(LocalContext.current, TimerService::class.java)
+
             Column(
                 modifier = Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -64,7 +67,13 @@ class WorkoutTracker : ComponentActivity() {
                     WorkoutTrackerScreen()
                 }
                 Button(
-                    onClick = { finishWorkout() },
+                    onClick = {
+
+                        // Stop the TimerService
+                        stopService(serviceIntent)
+                        finishWorkout()
+
+                              },
                     colors = ButtonDefaults.buttonColors(
                         backgroundColor = MuscleBlue,
                         contentColor = MaterialTheme.colors.onPrimary // White
@@ -91,6 +100,13 @@ class WorkoutTracker : ComponentActivity() {
 
     override fun onStop() {
         super.onStop()
+
+        // Unregister the broadcast receiver when the activity is finished
+        unregisterReceiver(elapsedTimeReceiver)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
 
         // Unregister the broadcast receiver when the activity is finished
         unregisterReceiver(elapsedTimeReceiver)
