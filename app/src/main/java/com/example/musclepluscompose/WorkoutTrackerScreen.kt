@@ -1,7 +1,10 @@
 package com.example.musclepluscompose
 
 import android.content.Intent
+import android.content.IntentFilter
 import android.graphics.Color
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -11,15 +14,18 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat.registerReceiver
 import androidx.core.content.ContextCompat.startActivity
 import com.example.musclepluscompose.data.AppViewModel
 import com.example.musclepluscompose.ui.theme.MuscleBlue
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
+import java.util.Timer
 
 @OptIn(ExperimentalFoundationApi::class)
 
@@ -94,29 +100,6 @@ fun SelectWorkoutScreen()
 @Composable
 fun WorkoutTrackerScreen() { // WE WILL MAKE IT SO IT PASS A WORKOUT AS PARAMETER TO DISPLAY EACH OF HIS EXERCICES
 
-    var elapsedTimeInSeconds by remember { mutableStateOf(0) }
-    val scope = rememberCoroutineScope()
-
-    fun formatElapsedTime(elapsedTimeInSeconds: Int): String {
-        val minutes = elapsedTimeInSeconds / 60
-        val seconds = elapsedTimeInSeconds % 60
-        return "%02d:%02d".format(minutes, seconds)
-    }
-
-    DisposableEffect(scope) {
-        onDispose {
-            scope.cancel()
-        }
-    }
-
-    LaunchedEffect(true) {
-        while (true) {
-            delay(1000)
-            elapsedTimeInSeconds += 1
-        }
-    }
-
-
     // Debugging
     var exerciseList by remember { mutableStateOf(mutableListOf(
         WorkoutTrackerExerciseList(
@@ -160,13 +143,6 @@ fun WorkoutTrackerScreen() { // WE WILL MAKE IT SO IT PASS A WORKOUT AS PARAMETE
             width = 300.dp,
             height = 2000.dp
         )) {
-        item {
-            Text(
-                text = "Timer: ${formatElapsedTime(elapsedTimeInSeconds)}",
-                fontSize = 36.sp,
-                fontWeight = FontWeight.Bold
-            )
-        }
         items(exerciseList.size) { indexExercise ->
             val exercise = exerciseList[indexExercise]
             Text(
@@ -225,7 +201,7 @@ fun WorkoutTrackerScreen() { // WE WILL MAKE IT SO IT PASS A WORKOUT AS PARAMETE
         }
         item {
             Text(
-                text = "Commentaire",
+                text = "Comment",
                 fontSize = 26.sp,
                 fontWeight = FontWeight.Bold,
             )
@@ -234,7 +210,8 @@ fun WorkoutTrackerScreen() { // WE WILL MAKE IT SO IT PASS A WORKOUT AS PARAMETE
             TextField(
                 value = "",
                 onValueChange = { /* handle value change */ },
-                label = { Text("Commentaire") },
+                label = { Text("Comment") },
+                modifier = Modifier.padding(bottom = 100.dp)
             )
         }
     }
