@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.Flow
 
 
 @Database(
-    entities = [Workout::class, Exercise::class, Workout_List::class, Workout_Done::class, Exercise_Done::class],
+    entities = [Workout::class, Exercise::class, Workout_Done::class, Exercise_Done::class],
     version = 1
 
 )

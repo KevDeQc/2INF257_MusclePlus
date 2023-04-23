@@ -89,6 +89,7 @@ class MainActivity : ComponentActivity() {
                                 )
                             ) ,
                             onItemClick = {
+                                scope.launch { scaffoldState.drawerState.close() }
                                 when(it.id){
                                     "home" -> navController.navigate(route = Screen.Home.route)
                                     "exercise" -> navController.navigate(route = Screen.Exercise.route)
