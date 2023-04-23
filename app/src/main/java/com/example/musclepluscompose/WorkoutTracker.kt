@@ -1,5 +1,6 @@
 package com.example.musclepluscompose
 
+import android.app.ActivityManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -89,9 +90,11 @@ class WorkoutTracker : ComponentActivity() {
     override fun onStart() {
         super.onStart()
 
-        // Start the TimerService
+        // Start the TimerService only if it's not already running
         val serviceIntent = Intent(this, TimerService::class.java)
-        ContextCompat.startForegroundService(this, serviceIntent)
+        if (!isServiceRunning(TimerService::class.java)) {
+            ContextCompat.startForegroundService(this, serviceIntent)
+        }
 
         // Register the broadcast receiver
         val filter = IntentFilter(TimerService.ACTION_UPDATE_ELAPSED_TIME)
@@ -100,9 +103,6 @@ class WorkoutTracker : ComponentActivity() {
 
     override fun onStop() {
         super.onStop()
-
-        // Unregister the broadcast receiver when the activity is finished
-        unregisterReceiver(elapsedTimeReceiver)
     }
 
     override fun onDestroy() {
@@ -122,5 +122,15 @@ class WorkoutTracker : ComponentActivity() {
         val minutes = TimeUnit.MILLISECONDS.toMinutes(timeMillis)
         val seconds = TimeUnit.MILLISECONDS.toSeconds(timeMillis) % 60
         return String.format("%02d:%02d", minutes, seconds)
+    }
+
+    private fun isServiceRunning(serviceClass: Class<*>): Boolean {
+        val activityManager = getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+        for (service in activityManager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.name == service.service.className) {
+                return true
+            }
+        }
+        return false
     }
 }
