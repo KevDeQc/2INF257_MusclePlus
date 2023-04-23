@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
 import java.util.Date
 
-@Entity()
+@Entity(tableName = "workouts_done")
 data class Workout_Done(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,

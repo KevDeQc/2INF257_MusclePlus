@@ -20,6 +20,8 @@ abstract class AppDatabase: RoomDatabase() {
 
     abstract fun workoutDao(): WorkoutDao
     abstract fun exerciseDao(): ExerciseDao
+    abstract fun Exercise_DoneDao(): Exercise_DoneDao
+    abstract fun Workout_DoneDao(): Workout_DoneDao
 
     companion object {
         @Volatile
@@ -76,5 +78,45 @@ interface ExerciseDao{
 
     @Upsert()
     suspend fun upsert(exercise: Exercise)
+
+}
+
+@Dao
+interface Workout_DoneDao{
+
+    @Query("SELECT * FROM workouts_done")
+    fun getAll(): Flow<List<Workout_Done>>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insert(workout_done: Workout_Done)
+
+    @Delete
+    suspend fun delete(workout_done: Workout_Done)
+
+    @Update(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun update(workout_done: Workout_Done)
+
+    @Upsert()
+    suspend fun upsert(workout_done: Workout_Done)
+
+}
+
+@Dao
+interface Exercise_DoneDao{
+
+    @Query("SELECT * FROM exercises_done")
+    fun getAll(): Flow<List<Exercise_Done>>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insert(exercise_done: Exercise_Done)
+
+    @Delete
+    suspend fun delete(exercise_done: Exercise_Done)
+
+    @Update(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun update(exercise_done: Exercise_Done)
+
+    @Upsert()
+    suspend fun upsert(exercise_done: Exercise_Done)
 
 }
