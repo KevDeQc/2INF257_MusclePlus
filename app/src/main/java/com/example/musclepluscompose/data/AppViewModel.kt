@@ -10,6 +10,8 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
 
     private val workoutDao = AppDatabase.getDatabase(application).workoutDao()
     private val exerciseDao = AppDatabase.getDatabase(application).exerciseDao()
+    private val workout_doneDao = AppDatabase.getDatabase(application).Workout_DoneDao()
+    private val exercise_doneDao = AppDatabase.getDatabase(application).Exercise_DoneDao()
 
     val allWorkout: Flow<List<Workout>> = workoutDao.getAll()
 
@@ -66,6 +68,61 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+//-------- Workout Done -------
+
+    val allWorkout_Done: Flow<List<Workout_Done>> = workout_doneDao.getAll()
+
+    fun insertWorkout_Done(workout_done: Workout_Done){
+        viewModelScope.launch {
+            workout_doneDao.insert(workout_done)
+        }
+    }
+
+    fun deleteWorkout_Done(workout_done: Workout_Done){
+        viewModelScope.launch {
+            workout_doneDao.delete(workout_done)
+        }
+    }
+
+    fun updateWorkout_Done(workout_done: Workout_Done){
+        viewModelScope.launch{
+            workout_doneDao.update(workout_done)
+        }
+    }
+
+    fun upsertWorkout_Done(workout_done: Workout_Done){
+        viewModelScope.launch {
+            workout_doneDao.upsert(workout_done)
+        }
+    }
+
+//-------- Exercise Done -------
+
+    val allExercise_Done: Flow<List<Exercise_Done>> = exercise_doneDao.getAll()
+
+    fun insertExercise_Done(exercise_done: Exercise_Done){
+        viewModelScope.launch {
+            exercise_doneDao.insert(exercise_done)
+        }
+    }
+
+    fun deleteExercise_Done(exercise_done: Exercise_Done){
+        viewModelScope.launch {
+            exercise_doneDao.delete(exercise_done)
+        }
+    }
+
+    fun updateExercise_Done(exercise_done: Exercise_Done){
+        viewModelScope.launch{
+            exercise_doneDao.update(exercise_done)
+        }
+    }
+
+    fun upsertExercise_Done(exercise_done: Exercise_Done){
+        viewModelScope.launch {
+            exercise_doneDao.upsert(exercise_done)
+        }
+    }
 
 
 

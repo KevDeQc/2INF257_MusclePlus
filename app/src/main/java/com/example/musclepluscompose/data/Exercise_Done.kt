@@ -3,7 +3,7 @@ package com.example.musclepluscompose.data
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity()
+@Entity(tableName = "exercises_done")
 data class Exercise_Done(
 
     @PrimaryKey
