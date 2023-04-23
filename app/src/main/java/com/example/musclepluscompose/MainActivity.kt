@@ -9,7 +9,13 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Build
+import androidx.compose.material.icons.filled.Face
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -67,25 +73,25 @@ class MainActivity : ComponentActivity() {
                                     id = "exercise",
                                     title = "Exercise",
                                     contentDescription = "Go to exercise screen",
-                                    icon = Icons.Default.Home
+                                    icon = Icons.Default.Star
                                 ),
                                 MenuItem(
                                     id = "workout",
                                     title = "Workout",
                                     contentDescription = "Go to workout screen",
-                                    icon = Icons.Default.Home
+                                    icon = Icons.Default.Favorite
                                 ),
                                 MenuItem(
                                     id = "stats",
                                     title = "Stats",
                                     contentDescription = "Go to stats screen",
-                                    icon = Icons.Default.Home
+                                    icon = Icons.Default.Info
                                 ),
                                 MenuItem(
                                     id = "startWorkout",
                                     title = "Start Workout",
                                     contentDescription = "Go to start workout activity",
-                                    icon = Icons.Default.Home
+                                    icon = Icons.Default.PlayArrow
                                 )
                             ) ,
                             onItemClick = {
