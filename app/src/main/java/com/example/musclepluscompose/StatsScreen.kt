@@ -19,6 +19,7 @@ import com.example.musclepluscompose.ui.theme.MuscleBlue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 import com.example.musclepluscompose.data.AppViewModel
+import com.example.musclepluscompose.data.Exercise
 import com.example.musclepluscompose.data.Exercise_Done
 import com.example.musclepluscompose.data.Workout_Done
 
@@ -26,6 +27,9 @@ import com.example.musclepluscompose.data.Workout_Done
 fun StatsScreen(viewModel: AppViewModel) {
 
     val listExercises by viewModel.allExercise.collectAsState(emptyList())
+    val exerciseDone by viewModel.allExercise_Done.collectAsState(emptyList())
+    var selectedExercise by remember { mutableStateOf<Exercise?>(null)}
+
     var expanded by remember { mutableStateOf(false) }
     var textFiledSize by remember { mutableStateOf(Size.Zero) }
     var selectedItem by remember { mutableStateOf("") }
@@ -57,6 +61,8 @@ fun StatsScreen(viewModel: AppViewModel) {
     //viewModel.upsertExercise_Done(Exercise_Done(1, 10, 120, 2))
     //viewModel.upsertExercise_Done(Exercise_Done(1, 12, 130, 3))
     //viewModel.upsertExercise_Done(Exercise_Done(1, 15, 140, 4))
+
+
 
     val exercises = listOf<Exercise_Done>(
         Exercise_Done(1, 10, 100, 1),
@@ -116,6 +122,7 @@ fun StatsScreen(viewModel: AppViewModel) {
             ) {
                 listExercises.forEach { label ->
                     DropdownMenuItem(onClick = {
+                        selectedExercise = label
                         selectedItem = label.name
                         expanded = false
                     }) {
@@ -161,7 +168,7 @@ fun StatsScreen(viewModel: AppViewModel) {
 
         }
 
-        LineChart(data,
+        LineChart(data, selectedExercise,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(200.dp)

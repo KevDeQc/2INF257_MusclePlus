@@ -30,6 +30,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.font.FontFamily
+import com.example.musclepluscompose.data.Exercise
 import kotlin.math.round
 import kotlin.math.roundToInt
 
@@ -37,6 +38,7 @@ import kotlin.math.roundToInt
 @Composable
 fun LineChart(
     data: List<Pair<String, Double>> = emptyList(),
+    exercise: Exercise?,
     modifier: Modifier = Modifier
 ) {
     val spacing = 100f
@@ -54,97 +56,102 @@ fun LineChart(
         }
     }
 
-    Column(Modifier.fillMaxSize()) {
+    if(exercise != null){
+        Column(Modifier.fillMaxSize()) {
 
-        Spacer(
-            Modifier
-                .fillMaxWidth()
-                .weight(1f))
-        Column(
-            modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ){
-            Text(text = "Push up over time",
-                textAlign = TextAlign.Center,
-                fontSize = 20.sp,
-                fontFamily = FontFamily.Serif)
-        }
+            Spacer(
+                Modifier
+                    .fillMaxWidth()
+                    .weight(1f))
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ){
+                Text(text = exercise.name,
+                    textAlign = TextAlign.Center,
+                    fontSize = 20.sp,
+                    fontFamily = FontFamily.Serif)
+            }
 
-        Spacer(
-            Modifier
-                .fillMaxWidth()
-                .weight(0.5f))
+            Spacer(
+                Modifier
+                    .fillMaxWidth()
+                    .weight(0.5f))
 
-        Canvas(modifier = modifier.padding(0.dp, 0.dp, 0.dp, 20.dp)) {
-            val spacePerHour = (size.width - spacing) / data.size
-            (data.indices).forEach { i ->
-                val hour = data[i].first
-                drawContext.canvas.nativeCanvas.apply {
-                    drawText(
-                        hour.toString(),
-                        spacing + i * spacePerHour,
-                        size.height,
-                        textPaint
+            Canvas(modifier = modifier.padding(0.dp, 0.dp, 0.dp, 20.dp)) {
+                val spacePerHour = (size.width - spacing) / data.size
+                (data.indices).forEach { i ->
+                    val hour = data[i].first
+                    drawContext.canvas.nativeCanvas.apply {
+                        drawText(
+                            hour.toString(),
+                            spacing + i * spacePerHour,
+                            size.height,
+                            textPaint
+                        )
+                    }
+                }
+
+                val priceStep = (upperValue - lowerValue) / 5f
+                (0..5).forEach { i ->
+                    drawContext.canvas.nativeCanvas.apply {
+                        drawText(
+                            round(lowerValue + priceStep * i).toInt().toString(),
+                            30f,
+                            size.height - spacing - i * size.height / 5f,
+                            textPaint
+                        )
+                    }
+                }
+
+                val strokePath = Path().apply {
+                    val height = size.height
+                    data.indices.forEach { i ->
+                        val info = data[i]
+                        val ratio = (info.second - lowerValue) / (upperValue - lowerValue)
+
+                        val x1 = spacing + i * spacePerHour
+                        val y1 = height - spacing - (ratio * height).toFloat()
+
+                        if (i == 0) { moveTo(x1, y1) }
+                        lineTo(x1, y1)
+                    }
+                }
+
+                drawPath(
+                    path = strokePath,
+                    color = graphColor,
+                    style = Stroke(
+                        width = 2.dp.toPx(),
+                        cap = StrokeCap.Round
                     )
-                }
-            }
+                )
 
-            val priceStep = (upperValue - lowerValue) / 5f
-            (0..5).forEach { i ->
-                drawContext.canvas.nativeCanvas.apply {
-                    drawText(
-                        round(lowerValue + priceStep * i).toInt().toString(),
-                        30f,
-                        size.height - spacing - i * size.height / 5f,
-                        textPaint
+                val fillPath = strokePath.asAndroidPath().asComposePath().apply {
+                    lineTo(size.width - spacePerHour, size.height - spacing)
+                    lineTo(spacing, size.height - spacing)
+                    close()
+                }
+
+                drawPath(
+                    path = fillPath,
+                    brush = Brush.verticalGradient(
+                        colors = listOf(
+                            transparentGraphColor,
+                            Color.Transparent
+                        ),
+                        endY = size.height - spacing
                     )
-                }
-            }
-
-            val strokePath = Path().apply {
-                val height = size.height
-                data.indices.forEach { i ->
-                    val info = data[i]
-                    val ratio = (info.second - lowerValue) / (upperValue - lowerValue)
-
-                    val x1 = spacing + i * spacePerHour
-                    val y1 = height - spacing - (ratio * height).toFloat()
-
-                    if (i == 0) { moveTo(x1, y1) }
-                    lineTo(x1, y1)
-                }
-            }
-
-            drawPath(
-                path = strokePath,
-                color = graphColor,
-                style = Stroke(
-                    width = 2.dp.toPx(),
-                    cap = StrokeCap.Round
                 )
-            )
 
-            val fillPath = strokePath.asAndroidPath().asComposePath().apply {
-                lineTo(size.width - spacePerHour, size.height - spacing)
-                lineTo(spacing, size.height - spacing)
-                close()
             }
-
-            drawPath(
-                path = fillPath,
-                brush = Brush.verticalGradient(
-                    colors = listOf(
-                        transparentGraphColor,
-                        Color.Transparent
-                    ),
-                    endY = size.height - spacing
-                )
-            )
 
         }
 
     }
+
+
 
 }
 
