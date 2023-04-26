@@ -4,6 +4,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.graphics.Color
 import android.os.Build
+import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -26,9 +27,15 @@ import com.example.musclepluscompose.ui.theme.MuscleBlue
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import java.util.Timer
+import androidx.activity.viewModels
+import com.example.musclepluscompose.data.Exercise
+import com.example.musclepluscompose.data.Workout
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 
 @OptIn(ExperimentalFoundationApi::class)
 
+/*
 @Composable
 fun SelectWorkoutScreen()
 {
@@ -42,7 +49,7 @@ fun SelectWorkoutScreen()
 
     if(isWorkingOut)
     {
-        WorkoutTrackerScreen()
+        //WorkoutTrackerScreen()
     }
     else
     {
@@ -95,32 +102,22 @@ fun SelectWorkoutScreen()
         }
     }
 
-}
+}*/
 
 @Composable
-fun WorkoutTrackerScreen() { // WE WILL MAKE IT SO IT PASS A WORKOUT AS PARAMETER TO DISPLAY EACH OF HIS EXERCICES
+fun WorkoutTrackerScreen(workout: Workout) { // WE WILL MAKE IT SO IT PASS A WORKOUT AS PARAMETER TO DISPLAY EACH OF HIS EXERCICES
 
-    // Debugging
-    var exerciseList by remember { mutableStateOf(mutableListOf(
+    var comment by remember { mutableStateOf("") }
+
+    var exerciseList by remember { mutableStateOf(workout.exercise.map {
         WorkoutTrackerExerciseList(
-            id = 1,
-            name = "Bench Press",
-            exerciseItems = mutableListOf(
-                WorkoutTrackerExerciseItem(weight = 100, rep = 10),
-                WorkoutTrackerExerciseItem(weight = 110, rep = 8),
-                WorkoutTrackerExerciseItem(weight = 120, rep = 6)
-            )
-        ),
-        WorkoutTrackerExerciseList(
-            id = 2,
-            name = "Squat",
-            exerciseItems = mutableListOf(
-                WorkoutTrackerExerciseItem(weight = 120, rep = 10),
-                WorkoutTrackerExerciseItem(weight = 130, rep = 8),
-                WorkoutTrackerExerciseItem(weight = 140, rep = 6)
-            )
+            id = it.id,
+            name = it.name,
+            exerciseItems = mutableListOf(WorkoutTrackerExerciseItem(weight = 0, rep = 0))
         )
-    )) }
+    }.toMutableList()) }
+
+
 
     fun setExerciseList(newList: MutableList<WorkoutTrackerExerciseList>) {
         exerciseList = newList
@@ -208,8 +205,10 @@ fun WorkoutTrackerScreen() { // WE WILL MAKE IT SO IT PASS A WORKOUT AS PARAMETE
         }
         item {
             TextField(
-                value = "",
-                onValueChange = { /* handle value change */ },
+                value = comment,
+                onValueChange = { newValue ->
+                    comment = newValue
+                },
                 label = { Text("Comment") },
                 modifier = Modifier.padding(bottom = 100.dp)
             )

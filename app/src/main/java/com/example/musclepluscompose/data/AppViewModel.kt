@@ -4,7 +4,13 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.count
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.forEach
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 class AppViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -15,11 +21,14 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
 
     val allWorkout: Flow<List<Workout>> = workoutDao.getAll()
 
+    fun findWorkout(id: Int): Workout{
+        return workoutDao.getById(id)
+    }
+
     fun insertWorkout(workout: Workout){
         viewModelScope.launch {
             workoutDao.insert(workout)
         }
-
     }
 
     fun deleteWorkout(workout: Workout){

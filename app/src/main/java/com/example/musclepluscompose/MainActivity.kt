@@ -187,7 +187,7 @@ class MainActivity : ComponentActivity() {
                                                             expanded = false;
                                                         }
                                                     ) {
-                                                        Text(text = item.name)
+                                                        Text(text = "${item.name} id ${item.id}" )
                                                     }
                                                 }
                                             }
@@ -205,8 +205,8 @@ class MainActivity : ComponentActivity() {
                                                 }
                                                 Button(
                                                     onClick = {
-                                                        startWorkoutActivity()
-                                                              // TODO Send workout as intent and start workout tracker activity
+                                                        // TODO verify that it can't be null
+                                                        startWorkoutActivity(selectedItem?.id ?:0) // Should never be null
                                                     },
                                                     modifier = Modifier.weight(1f).padding(start = 8.dp)
                                                 ) {
@@ -225,8 +225,9 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    private fun startWorkoutActivity() {
+    private fun startWorkoutActivity(id: Int) {
         Intent(this, WorkoutTracker::class.java).also {
+            it.putExtra("WorkoutID", id)
             startActivity(it)
         }
     }

@@ -31,11 +31,15 @@ import androidx.room.Room
 import com.example.musclepluscompose.data.AppDatabase
 import com.example.musclepluscompose.ui.theme.MuscleBlue
 import java.util.concurrent.TimeUnit
+import com.example.musclepluscompose.data.AppViewModel
+import com.example.musclepluscompose.data.Workout
 
 class WorkoutTracker : ComponentActivity() {
 
+    private val viewModel by viewModels<AppViewModel>()
+
     // Remember the elapsed time as a state variable
-    val elapsedTime = mutableStateOf("00:00")
+    private val elapsedTime = mutableStateOf("00:00")
 
     // Declare the broadcast receiver
     private val elapsedTimeReceiver = object : BroadcastReceiver() {
@@ -53,6 +57,9 @@ class WorkoutTracker : ComponentActivity() {
         setContent {
 
             val serviceIntent = Intent(LocalContext.current, TimerService::class.java)
+            val workoutID = intent.getIntExtra("WorkoutID", 0)
+
+            val workout: Workout = viewModel.findWorkout(workoutID)
 
             Column(
                 modifier = Modifier.fillMaxSize(),
@@ -63,9 +70,10 @@ class WorkoutTracker : ComponentActivity() {
                     text = "Elapsed Time: ${elapsedTime.value}",
                     style = MaterialTheme.typography.h4
                 )
+                Text(text = "Workout in Progress: ${workout.name}")
                 Spacer(modifier = Modifier.height(16.dp))
                 Box(modifier = Modifier.weight(1f)) {
-                    WorkoutTrackerScreen()
+                    WorkoutTrackerScreen(workout)
                 }
                 Button(
                     onClick = {

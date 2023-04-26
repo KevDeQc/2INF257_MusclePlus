@@ -33,7 +33,7 @@ abstract class AppDatabase: RoomDatabase() {
                     context.applicationContext,
                     AppDatabase::class.java,
                     "App.db"
-                ).build()
+                ).allowMainThreadQueries().build()
                 INSTANCE = instance
                 instance
             }
@@ -47,6 +47,9 @@ interface WorkoutDao{
 
     @Query("SELECT * FROM workouts")
     fun getAll(): Flow<List<Workout>>
+
+    @Query("SELECT * FROM workouts WHERE id = :id")
+    fun getById(id: Int): Workout
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(workout: Workout)
