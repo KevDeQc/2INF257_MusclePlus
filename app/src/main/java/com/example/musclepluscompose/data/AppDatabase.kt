@@ -27,13 +27,14 @@ abstract class AppDatabase: RoomDatabase() {
         @Volatile
         private var INSTANCE: AppDatabase? = null
 
+        //allowMainThread -> for functions with no coroutines
         fun getDatabase(context: Context): AppDatabase {
             return INSTANCE ?: synchronized(this) {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     AppDatabase::class.java,
                     "App.db"
-                ).build()
+                ).allowMainThreadQueries().build()
                 INSTANCE = instance
                 instance
             }
@@ -48,6 +49,9 @@ interface WorkoutDao{
     @Query("SELECT * FROM workouts")
     fun getAll(): Flow<List<Workout>>
 
+    @Query("SELECT * FROM workouts WHERE id =:id")
+    fun getWorkoutById(id : Int) : Workout
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(workout: Workout)
 
@@ -59,6 +63,7 @@ interface WorkoutDao{
 
     @Upsert()
     suspend fun upsert(workout: Workout)
+
 }
 
 @Dao

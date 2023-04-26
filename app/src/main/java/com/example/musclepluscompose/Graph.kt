@@ -46,28 +46,6 @@ fun LineChart(
     val lowerValue = remember { (data.minOfOrNull { it.second }?.toInt() ?: 0) }
     val density = LocalDensity.current
 
-    var expanded by remember { mutableStateOf(false) }
-    var textFiledSize by remember { mutableStateOf(Size.Zero) }
-    var selectedItem by remember { mutableStateOf("") }
-    val list = listOf("Push up", "Sit up", "Squat")
-
-    var expanded1 by remember { mutableStateOf(false) }
-    var textFiledSize1 by remember { mutableStateOf(Size.Zero) }
-    var selectedItem1 by remember { mutableStateOf("") }
-    val list1 = listOf("Week", "Month", "Year")
-
-    val icon1 = if (expanded1) {
-        Icons.Filled.KeyboardArrowUp
-    } else {
-        Icons.Filled.KeyboardArrowDown
-    }
-
-    val icon = if (expanded) {
-        Icons.Filled.KeyboardArrowUp
-    } else {
-        Icons.Filled.KeyboardArrowDown
-    }
-
     val textPaint = remember(density) {
         Paint().apply {
             color = android.graphics.Color.BLACK
@@ -77,74 +55,6 @@ fun LineChart(
     }
 
     Column(Modifier.fillMaxSize()) {
-        Column(modifier = Modifier.padding(20.dp, 10.dp)) {
-            OutlinedTextField(
-                value = selectedItem,
-                onValueChange = { selectedItem = it },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .onGloballyPositioned { coordinates ->
-                        //This value is used to assign to the DropDown the same width
-                        textFiledSize = coordinates.size.toSize()
-                    },
-                label = { Text("Choose exercise") },
-                trailingIcon = {
-                    Icon(icon, "contentDescription",
-                        Modifier.clickable { expanded = !expanded })
-                }
-            )
-            DropdownMenu(
-                expanded = expanded,
-                onDismissRequest = { expanded = false },
-                modifier = Modifier
-                    .width(with(LocalDensity.current) { textFiledSize.width.toDp() })
-            ) {
-                list.forEach { label ->
-                    DropdownMenuItem(onClick = {
-                        selectedItem = label
-                        expanded = false
-                    }) {
-                        Text(text = label)
-                    }
-                }
-
-            }
-        }
-
-        Column(modifier = Modifier.padding(20.dp, 0.dp)) {
-            OutlinedTextField(
-                value = selectedItem1,
-                onValueChange = { selectedItem1 = it },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .onGloballyPositioned { coordinates ->
-                        //This value is used to assign to the DropDown the same width
-                        textFiledSize1 = coordinates.size.toSize()
-                    },
-                label = { Text("Time period") },
-                trailingIcon = {
-                    Icon(icon1, "contentDescription",
-                        Modifier.clickable { expanded1 = !expanded1 })
-                }
-            )
-            DropdownMenu(
-                expanded = expanded1,
-                onDismissRequest = { expanded1 = false },
-                modifier = Modifier
-                    .width(with(LocalDensity.current) { textFiledSize1.width.toDp() })
-            ) {
-                list1.forEach { label ->
-                    DropdownMenuItem(onClick = {
-                        selectedItem1 = label
-                        expanded1 = false
-                    }) {
-                        Text(text = label)
-                    }
-                }
-
-            }
-
-        }
 
         Spacer(
             Modifier

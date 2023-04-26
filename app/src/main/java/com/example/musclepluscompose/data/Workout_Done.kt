@@ -7,10 +7,12 @@ import java.util.Date
 
 @Entity(tableName = "workouts_done")
 data class Workout_Done(
-    @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
+
+
     val workout_id: Int,
     @TypeConverters(DateConverter::class)
     val date: Date,
-    val comment: String
+    val comment: String,
+    @PrimaryKey(autoGenerate = true)
+    val id: Int = 0,
 )

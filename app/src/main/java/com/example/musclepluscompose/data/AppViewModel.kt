@@ -40,6 +40,11 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    // should use coroutine
+    fun getWorkoutById(id : Int) : Workout{
+        return workoutDao.getWorkoutById(id)
+    }
+
 //-------- Exercise -------
 
     val allExercise: Flow<List<Exercise>> = exerciseDao.getAll()
