@@ -135,33 +135,13 @@ fun EditWorkoutScreen(
 
     if(isAddingExercise){
         //ChooseExercise(onDismiss = {isAddingExercise = false}, allExercises, currentExercise)
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ){
-            Text(text = "Exercises:")
-            LazyColumn(
-                verticalArrangement = Arrangement.spacedBy(5.dp)
-            ) {
-                items(allExercises) { exercise ->
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text(text = exercise.name)
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text(text = exercise.desc)
-                        IconButton(onClick = { workout.exercise.add(exercise)
-                            isAddingExercise = false }) {
-                            Icon(
-                                modifier = Modifier.fillMaxSize(),
-                                imageVector = Icons.Filled.Add,
-                                contentDescription = "Add"
-                            )
-                        }
-                    }
-                }
-            }
-
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Button( // Excercice add cancel btn
                     onClick = { isAddingExercise = false},
@@ -174,10 +154,49 @@ fun EditWorkoutScreen(
                     Text(text = "Cancel")
                 }
             }
+            Text(text = "Exercises:")
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) {
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.spacedBy(5.dp)
+                ) {
+                    items(allExercises) { exercise ->
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Text(
+                                text = exercise.name,
+                                fontWeight = FontWeight.Bold,
+                                modifier = Modifier.weight(0.3f)
+                            )
+                            Spacer(modifier = Modifier.width(2.dp))
+                            Text(
+                                text = exercise.desc,
+                                modifier = Modifier.weight(0.6f)
+                            )
+                            IconButton(
+                                onClick = {
+                                    workout.exercise.add(exercise)
+                                    isAddingExercise = false
+                                },
+                                modifier = Modifier.weight(0.1f)
+                            ) {
+                                Icon(
+                                    modifier = Modifier.fillMaxSize(),
+                                    imageVector = Icons.Filled.Add,
+                                    contentDescription = "Add"
+                                )
+                            }
+                        }
+                    }
 
+                }
+            }
         }
     }
     else{
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -209,37 +228,14 @@ fun EditWorkoutScreen(
                 modifier = Modifier.fillMaxWidth()
             )
 
-            Text(text = "Exercises:")
-            LazyColumn(
-                verticalArrangement = Arrangement.spacedBy(5.dp)
-            ) {
-                val mutableExerciseList = exerciseInWorkout.toMutableList()
-                items(mutableExerciseList) { exercise ->
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text(text = exercise.name)
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text(text = exercise.desc)
-
-                        IconButton(onClick = { mutableExerciseList.remove(exercise)
-                        exerciseInWorkout = mutableExerciseList.toList()}) {
-                            Icon(
-                                modifier = Modifier.fillMaxSize(),
-                                imageVector = Icons.Filled.Delete,
-                                contentDescription = "delete"
-                            )
-                        }
-                    }
-                }
-            }
-
             Button( // Add exercice btn
                 colors = ButtonDefaults.buttonColors(
                     backgroundColor = MuscleBlue,
                     contentColor = MaterialTheme.colors.onPrimary // White
                 ),
                 onClick = {
-                isAddingExercise = true
-            }) {
+                    isAddingExercise = true
+                }) {
                 Text(text = "Add exercise")
             }
 
@@ -268,6 +264,47 @@ fun EditWorkoutScreen(
                     }
                 ) {
                     Text("Save")
+                }
+            }
+
+            Text(text = "Exercises:")
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(600.dp)
+            ) {
+                LazyColumn(
+                    verticalArrangement = Arrangement.spacedBy(5.dp)
+                ) {
+                    val mutableExerciseList = exerciseInWorkout.toMutableList()
+                    items(mutableExerciseList) { exercise ->
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Text(
+                                text = exercise.name,
+                                fontWeight = FontWeight.Bold,
+                                modifier = Modifier.weight(0.3f)
+                            )
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Text(
+                                text = exercise.desc,
+                                modifier = Modifier.weight(0.6f)
+                            )
+                            IconButton(
+                                onClick = {
+                                    mutableExerciseList.remove(exercise)
+                                    exerciseInWorkout = mutableExerciseList.toList()
+                                },
+                                modifier = Modifier.weight(0.1f)
+                            ) {
+                                Icon(
+                                    modifier = Modifier.fillMaxSize(),
+                                    imageVector = Icons.Filled.Delete,
+                                    contentDescription = "delete"
+                                )
+                            }
+                        }
+                    }
+
                 }
             }
         }
