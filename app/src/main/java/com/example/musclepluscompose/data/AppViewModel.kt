@@ -85,6 +85,11 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         return workout_doneDao.getLatestWorkoutDone()?.id ?: 0
     }
 
+    fun getWorkoutDoneById(id: Int) : Workout_Done?
+    {
+        return workout_doneDao.getWorkoutDoneById(id)
+    }
+
     fun insertWorkout_Done(workout_done: Workout_Done){
         viewModelScope.launch {
             workout_doneDao.insert(workout_done)

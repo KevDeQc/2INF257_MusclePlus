@@ -25,6 +25,7 @@ import com.example.musclepluscompose.data.AppViewModel
 import com.example.musclepluscompose.data.Workout
 import com.example.musclepluscompose.ui.theme.MusclePlusComposeTheme
 import kotlinx.coroutines.launch
+import java.util.concurrent.TimeUnit
 
 
 class MainActivity : ComponentActivity() {
@@ -232,11 +233,27 @@ class MainActivity : ComponentActivity() {
     }
 
     fun share(){
-        val message = "Text I want to share.";
         val shareIntent = Intent(Intent.ACTION_SEND);
         shareIntent.setType("text/plain");
-        shareIntent.putExtra(Intent.EXTRA_TEXT, message);
 
-        startActivity(Intent.createChooser(shareIntent, "Title of the dialog the system will open"))
+        val lastWorkoutDone = viewModel.getWorkoutDoneById(viewModel.getLastWorkoutDone())
+
+        val workoutId = lastWorkoutDone?.workout_id ?:-1
+        if (workoutId !== -1)
+        {
+            val workout = viewModel.findWorkout(workoutId)
+
+            val message = "I finished the ${workout.name} workout in ${formatElapsedTime(lastWorkoutDone!!.time)} minutes on the date of ${lastWorkoutDone.date}";
+            shareIntent.putExtra(Intent.EXTRA_TEXT, message);
+
+            startActivity(Intent.createChooser(shareIntent, "Share my workout"))
+        }
+
+    }
+
+    private fun formatElapsedTime(timeMillis: Long): String {
+        val minutes = TimeUnit.MILLISECONDS.toMinutes(timeMillis)
+        val seconds = TimeUnit.MILLISECONDS.toSeconds(timeMillis) % 60
+        return String.format("%02d:%02d", minutes, seconds)
     }
 }
