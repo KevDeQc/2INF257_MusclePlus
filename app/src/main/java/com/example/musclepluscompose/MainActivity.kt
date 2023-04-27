@@ -1,53 +1,30 @@
 package com.example.musclepluscompose
 
+import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material.icons.filled.Build
-import androidx.compose.material.icons.filled.Face
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.PlayArrow
-import androidx.compose.material.icons.filled.Star
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
-import androidx.room.Room
-import com.example.musclepluscompose.ui.theme.MusclePlusComposeTheme
-import kotlinx.coroutines.launch
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material.icons.filled.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import com.example.musclepluscompose.data.AppDatabase
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.musclepluscompose.data.AppViewModel
 import com.example.musclepluscompose.data.Workout
+import com.example.musclepluscompose.ui.theme.MusclePlusComposeTheme
+import kotlinx.coroutines.launch
 
 
 class MainActivity : ComponentActivity() {
@@ -116,7 +93,13 @@ class MainActivity : ComponentActivity() {
                                     title = "Start Workout",
                                     contentDescription = "Go to start workout activity",
                                     icon = Icons.Default.PlayArrow
-                                )
+                                ),
+                                MenuItem(
+                                id = "share",
+                                title = "Share !",
+                                contentDescription = "Share your last workout stats where you want",
+                                icon = Icons.Default.PlayArrow
+                            )
                             ) ,
                             onItemClick = {
                                 scope.launch { scaffoldState.drawerState.close() }
@@ -126,6 +109,8 @@ class MainActivity : ComponentActivity() {
                                     "workout" -> navController.navigate(route = Screen.Workout.route)
                                     "stats" -> navController.navigate(route = Screen.Stats.route)
                                     "startWorkout" -> showDialog.value = true
+                                    //"shareTwitter" -> startActivity(getTwitterIntent(this@MainActivity, "Allo"))
+                                    "share" -> share()
                                 }
                             })
                     }
@@ -168,9 +153,8 @@ class MainActivity : ComponentActivity() {
                                                 value = selectedItem?.name ?: "No workout chosen",
                                                 onValueChange = {},
                                                 modifier = Modifier
-                                                    .fillMaxWidth()
-                                                    //.clickable(onClick = { expanded = true }) // Doesn't work?
-                                                ,
+                                                    .fillMaxWidth(),
+                                                //.clickable(onClick = { expanded = true }) // Doesn't work?
                                                 readOnly = true,
                                             )
 
@@ -193,13 +177,17 @@ class MainActivity : ComponentActivity() {
                                             }
 
                                             Row(
-                                                modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
+                                                modifier = Modifier
+                                                    .fillMaxWidth()
+                                                    .padding(top = 8.dp),
                                                 horizontalArrangement = Arrangement.SpaceBetween,
                                                 verticalAlignment = Alignment.CenterVertically
                                             ) {
                                                 Button(
                                                     onClick = { expanded = true },
-                                                    modifier = Modifier.weight(1f).padding(end = 8.dp)
+                                                    modifier = Modifier
+                                                        .weight(1f)
+                                                        .padding(end = 8.dp)
                                                 ) {
                                                     Text(text = "Open List")
                                                 }
@@ -208,7 +196,9 @@ class MainActivity : ComponentActivity() {
                                                         // TODO verify that it can't be null
                                                         startWorkoutActivity(selectedItem?.id ?:0) // Should never be null
                                                     },
-                                                    modifier = Modifier.weight(1f).padding(start = 8.dp)
+                                                    modifier = Modifier
+                                                        .weight(1f)
+                                                        .padding(start = 8.dp)
                                                 ) {
                                                     Text(text = "Start")
                                                 }
@@ -230,5 +220,23 @@ class MainActivity : ComponentActivity() {
             it.putExtra("WorkoutID", id)
             startActivity(it)
         }
+    }
+
+    fun getTwitterIntent(ctx: Context?, shareText: String):  Intent? {
+        val shareIntent: Intent
+
+            val tweetUrl = "https://twitter.com/intent/tweet?text=$shareText"
+            val uri: Uri = Uri.parse(tweetUrl)
+            shareIntent = Intent(Intent.ACTION_VIEW, uri)
+            return shareIntent
+    }
+
+    fun share(){
+        val message = "Text I want to share.";
+        val shareIntent = Intent(Intent.ACTION_SEND);
+        shareIntent.setType("text/plain");
+        shareIntent.putExtra(Intent.EXTRA_TEXT, message);
+
+        startActivity(Intent.createChooser(shareIntent, "Title of the dialog the system will open"))
     }
 }
