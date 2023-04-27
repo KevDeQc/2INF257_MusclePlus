@@ -4,7 +4,11 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.forEach
 import kotlinx.coroutines.launch
+import java.time.Instant
+import java.util.Date
 
 class AppViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -77,6 +81,10 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
 
     val allWorkout_Done: Flow<List<Workout_Done>> = workout_doneDao.getAll()
 
+    fun getWorkoutDoneById(id : Int) : Workout_Done{
+        return workout_doneDao.getWorkoutDoneById(id)
+    }
+
     fun insertWorkout_Done(workout_done: Workout_Done){
         viewModelScope.launch {
             workout_doneDao.insert(workout_done)
@@ -104,6 +112,25 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
 //-------- Exercise Done -------
 
     val allExercise_Done: Flow<List<Exercise_Done>> = exercise_doneDao.getAll()
+
+    fun getAllExerciseDoneInTimeById(exercise_id: Int, timeScope : Int) : List<Exercise_Done>{
+
+        val currentTime = Date.from(Instant.now()).time
+        val maxTime = currentTime - (timeScope * 86400).toLong()
+
+
+
+        val result = mutableListOf<Exercise_Done>()
+        val temp = exercise_doneDao.getAllExerciseDoneByExerciseId(exercise_id)
+        temp.forEach { item ->
+            val date = getWorkoutDoneById(item.workout_done_id).date
+            if (date.time > maxTime){
+                result.add(item)
+            }
+        }
+
+        return result
+    }
 
     fun insertExercise_Done(exercise_done: Exercise_Done){
         viewModelScope.launch {

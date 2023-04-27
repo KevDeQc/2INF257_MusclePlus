@@ -18,16 +18,28 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.musclepluscompose.ui.theme.MuscleBlue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
-import com.example.musclepluscompose.data.AppViewModel
-import com.example.musclepluscompose.data.Exercise
-import com.example.musclepluscompose.data.Exercise_Done
-import com.example.musclepluscompose.data.Workout_Done
+import com.example.musclepluscompose.data.*
+import java.time.Instant
+import java.util.Calendar
+import java.util.Date
+
+data class DataPoint(val x: Float, val y: Float)
+
+/*
+private fun ConvertData(viewModel: AppViewModel, exerciseList: List<Exercise_Done>, timeScopeInDay : Int) : List<DataPoint>{
+
+    //get all exerciseDone in  a time scope
+
+    var resultList : MutableList<DataPoint>
+
+}
+
+ */
 
 @Composable
 fun StatsScreen(viewModel: AppViewModel) {
 
     val listExercises by viewModel.allExercise.collectAsState(emptyList())
-    val exerciseDone by viewModel.allExercise_Done.collectAsState(emptyList())
     var selectedExercise by remember { mutableStateOf<Exercise?>(null)}
 
     var expanded by remember { mutableStateOf(false) }
@@ -36,8 +48,9 @@ fun StatsScreen(viewModel: AppViewModel) {
 
     var expanded1 by remember { mutableStateOf(false) }
     var textFiledSize1 by remember { mutableStateOf(Size.Zero) }
-    var selectedItem1 by remember { mutableStateOf("") }
+    //var selectedItem1 by remember { mutableStateOf("") }
     val listTimeLapse = listOf("Week", "1 Month", "3 month", "6 month", "Year")
+    var selectedTimeLapse by remember { mutableStateOf("") }
 
     val icon1 = if (expanded1) {
         Icons.Filled.KeyboardArrowUp
@@ -51,44 +64,36 @@ fun StatsScreen(viewModel: AppViewModel) {
         Icons.Filled.KeyboardArrowDown
     }
 
+    val exercise1 = Exercise("Test", "ceci est un test", 1)
+    viewModel.upsertExercise(exercise1)
+    viewModel.upsertWorkout(Workout("WorkoutTest", "ceci est un test", mutableListOf(exercise1, exercise1, exercise1), 1))
+    viewModel.upsertWorkout_Done(Workout_Done(1, , "no comment", 1))
+    viewModel.upsertExercise_Done(Exercise_Done(1, 10, 100, 1))
 
-    //viewModel.upsertWorkout_Done(Workout_Done(1, java.util.Date(20230426), "yo"))
-    //viewModel.upsertWorkout_Done(Workout_Done(1, java.util.Date(20230427), "yo"))
-    //viewModel.upsertWorkout_Done(Workout_Done(1, java.util.Date(20230428), "yo"))
-    //viewModel.upsertWorkout_Done(Workout_Done(1, java.util.Date(20230429), "yo"))
+    viewModel.upsertWorkout_Done(Workout_Done(1, Date(), "no comment", 2))
+    viewModel.upsertExercise_Done(Exercise_Done(1, 10, 100, 2))
 
-    //viewModel.upsertExercise_Done(Exercise_Done(1, 10, 100, 1))
-    //viewModel.upsertExercise_Done(Exercise_Done(1, 10, 120, 2))
-    //viewModel.upsertExercise_Done(Exercise_Done(1, 12, 130, 3))
-    //viewModel.upsertExercise_Done(Exercise_Done(1, 15, 140, 4))
+    viewModel.upsertWorkout_Done(Workout_Done(1, Date((Date.from(Instant.now()).time - 432000)), "no comment", 2))
+    viewModel.upsertExercise_Done(Exercise_Done(1, 10, 100, 3))
 
+    viewModel.upsertWorkout_Done(Workout_Done(1, Date((Date.from(Instant.now()).time - 864000)), "no comment", 2))
+    viewModel.upsertExercise_Done(Exercise_Done(1, 10, 100, 4))
 
 
-    val exercises = listOf<Exercise_Done>(
-        Exercise_Done(1, 10, 100, 1),
-        Exercise_Done(1, 10, 120, 1),
-        Exercise_Done(1, 12, 130, 1),
-        Exercise_Done(1, 15, 140, 1)
+    val test = viewModel.getAllExerciseDoneInTimeById(1, 7)
 
+    val dataPoints = listOf(
+        DataPoint(0f, 50f),
+        DataPoint(1f, 70f),
+        DataPoint(2f, 60f),
+        DataPoint(3f, 80f),
+        DataPoint(4f, 90f),
+        DataPoint(5f, 75f),
+        DataPoint(6f, 85f),
+        DataPoint(7f, 65f),
+        DataPoint(8f, 80f),
+        DataPoint(20f, 70f)
     )
-
-    val workouts = listOf<Workout_Done>(
-        Workout_Done(1, java.util.Date(20230426), "yo"),
-        Workout_Done(1, java.util.Date(20230427), "yo"),
-        Workout_Done(1, java.util.Date(20230428), "yo"),
-        Workout_Done(1, java.util.Date(20230429), "yo")
-
-    )
-
-    val data = listOf(
-        Pair("12/02", 20.0),
-        Pair("13/02", 22.0),
-        Pair("14/02", 25.0),
-        Pair("15/02", 23.0),
-        Pair("16/02", 24.0),
-        Pair("17/02", 25.0),
-        Pair("18/02", 27.0),
-)
 
     Column(
         modifier = Modifier
@@ -135,8 +140,8 @@ fun StatsScreen(viewModel: AppViewModel) {
 
         Column(modifier = Modifier.padding(20.dp, 0.dp)) {
             OutlinedTextField(
-                value = selectedItem1,
-                onValueChange = { selectedItem1 = it },
+                value = selectedTimeLapse,
+                onValueChange = { selectedTimeLapse = it },
                 modifier = Modifier
                     .fillMaxWidth()
                     .onGloballyPositioned { coordinates ->
@@ -157,7 +162,7 @@ fun StatsScreen(viewModel: AppViewModel) {
             ) {
                 listTimeLapse.forEach { label ->
                     DropdownMenuItem(onClick = {
-                        selectedItem1 = label
+                        selectedTimeLapse = label
                         expanded1 = false
                     }) {
                         Text(text = label)
@@ -167,12 +172,25 @@ fun StatsScreen(viewModel: AppViewModel) {
             }
 
         }
+        /*
 
-        LineChart(data, selectedExercise,
+        LineChart(data, selectedExercise, 7,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(200.dp)
                 .align(CenterHorizontally))
+                
+         */
+
+
+
+        if(selectedExercise != null){
+            val test = viewModel.getAllExerciseDoneInTimeById(selectedExercise!!.id, 7)
+            Text(text = test[1].rep.toString())
+            LineChartWithScaling(dataPoints = dataPoints)
+        }
+        
+
 
     }
 }
