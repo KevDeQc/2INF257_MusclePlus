@@ -172,7 +172,7 @@ class MainActivity : ComponentActivity() {
                                                             expanded = false;
                                                         }
                                                     ) {
-                                                        Text(text = "${item.name} id ${item.id}" )
+                                                        Text(text = "${item.name}" )
                                                     }
                                                 }
                                             }
@@ -194,8 +194,11 @@ class MainActivity : ComponentActivity() {
                                                 }
                                                 Button(
                                                     onClick = {
-                                                        // TODO verify that it can't be null
-                                                        startWorkoutActivity(selectedItem?.id ?:0) // Should never be null
+                                                        val getId: Int = selectedItem?.id ?:0
+
+                                                        if(getId != 0){
+                                                            startWorkoutActivity(getId)
+                                                        }
                                                     },
                                                     modifier = Modifier
                                                         .weight(1f)
@@ -210,7 +213,6 @@ class MainActivity : ComponentActivity() {
                             }
                         }
                     }
-
                 }
             }
         }
