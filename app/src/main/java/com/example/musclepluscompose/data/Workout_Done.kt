@@ -12,5 +12,6 @@ data class Workout_Done(
     val workout_id: Int,
     @TypeConverters(DateConverter::class)
     val date: Date,
+    val time: Long,
     val comment: String
 )

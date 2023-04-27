@@ -122,6 +122,7 @@ fun WorkoutTrackerScreen(workout: Workout, updateWorkoutTrackerData: UpdateWorko
 
     fun setExerciseList(newList: MutableList<WorkoutTrackerExerciseList>) {
         exerciseList = newList
+        updateWorkoutTrackerData(comment, exerciseList)
     }
 
     fun addItem(indexExercise: Int, weight: Int, rep: Int) {
@@ -132,6 +133,7 @@ fun WorkoutTrackerScreen(workout: Workout, updateWorkoutTrackerData: UpdateWorko
         newExerciseList[indexExercise] = exercise.copy(exerciseItems = newExerciseItems)
         setExerciseList(newExerciseList)
         updateWorkoutTrackerData(comment, exerciseList)
+        println(exerciseList)
     }
 
     LazyColumn(modifier = Modifier

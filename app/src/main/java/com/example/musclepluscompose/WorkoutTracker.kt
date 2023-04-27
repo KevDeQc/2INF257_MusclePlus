@@ -39,6 +39,7 @@ import com.example.musclepluscompose.data.AppViewModel
 import com.example.musclepluscompose.data.Exercise_Done
 import com.example.musclepluscompose.data.Workout
 import com.example.musclepluscompose.data.Workout_Done
+import kotlinx.coroutines.delay
 import java.util.Date
 
 class WorkoutTracker : ComponentActivity() {
@@ -47,14 +48,15 @@ class WorkoutTracker : ComponentActivity() {
 
     // Remember the elapsed time as a state variable
     private val elapsedTime = mutableStateOf("00:00")
+    private val elapsedTimeMillis = mutableStateOf(0L)
 
     // Declare the broadcast receiver
     private val elapsedTimeReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             if (intent?.action == TimerService.ACTION_UPDATE_ELAPSED_TIME) {
                 // Update the elapsed time state variable
-                val elapsedTimeMillis = intent.getLongExtra(TimerService.EXTRA_ELAPSED_TIME, 0L)
-                elapsedTime.value = formatElapsedTime(elapsedTimeMillis)
+                elapsedTimeMillis.value = intent.getLongExtra(TimerService.EXTRA_ELAPSED_TIME, 0L)
+                elapsedTime.value = formatElapsedTime(elapsedTimeMillis.value)
             }
         }
     }
@@ -99,7 +101,7 @@ class WorkoutTracker : ComponentActivity() {
                         // Stop the TimerService
                         stopService(serviceIntent)
                         println(commentValue)
-                        finishWorkout(commentValue, exerciseListValue, workoutID)
+                        finishWorkout(commentValue, exerciseListValue, workoutID, elapsedTimeMillis.value)
 
                               },
                     colors = ButtonDefaults.buttonColors(
@@ -139,15 +141,18 @@ class WorkoutTracker : ComponentActivity() {
         unregisterReceiver(elapsedTimeReceiver)
     }
 
-    private fun finishWorkout(comment: String, exerciseList: List<WorkoutTrackerExerciseList>, workoutID: Int) {
+    private fun finishWorkout(comment: String, exerciseList: List<WorkoutTrackerExerciseList>, workoutID: Int, elapsedTimeMillis: Long) {
 
-        viewModel.upsertWorkout_Done(Workout_Done(workout_id = workoutID, date = Date(), comment = comment))
+        val workoutDoneId = viewModel.upsertWorkout_Done(Workout_Done(workout_id = workoutID, date = Date(), comment = comment, time = elapsedTimeMillis))
+
+        //val workoutDoneId = viewModel.getLastWorkoutDone()
 
         exerciseList.forEach(){
             var exId = it.id
 
+            println(it)
             it.exerciseItems.forEach(){
-                viewModel.upsertExercise_Done(Exercise_Done(exercise_id = exId, rep = it.rep, weight = it.weight, workout_done_id = 1))
+                viewModel.upsertExercise_Done(Exercise_Done(exercise_id = exId, rep = it.rep, weight = it.weight, workout_done_id = workoutDoneId))
             }
         }
 

@@ -81,6 +81,10 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
 
     val allWorkout_Done: Flow<List<Workout_Done>> = workout_doneDao.getAll()
 
+    fun getLastWorkoutDone(): Int{
+        return workout_doneDao.getLatestWorkoutDone().id
+    }
+
     fun insertWorkout_Done(workout_done: Workout_Done){
         viewModelScope.launch {
             workout_doneDao.insert(workout_done)
@@ -99,10 +103,11 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun upsertWorkout_Done(workout_done: Workout_Done){
+    fun upsertWorkout_Done(workout_done: Workout_Done): Int{
         viewModelScope.launch {
             workout_doneDao.upsert(workout_done)
         }
+        return workout_doneDao.getLatestWorkoutDone().id + 1 // Quick fix
     }
 
 //-------- Exercise Done -------
