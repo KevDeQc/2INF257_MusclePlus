@@ -6,6 +6,7 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 
 import android.content.Context
+import androidx.compose.runtime.mutableStateOf
 import androidx.room.*
 import androidx.sqlite.db.SupportSQLiteDatabase
 import kotlinx.coroutines.flow.Flow
@@ -30,7 +31,7 @@ abstract class AppDatabase: RoomDatabase() {
         @Volatile
         private var INSTANCE: AppDatabase? = null
 
-        val exercises = listOf(
+        val exercises = listOf<Exercise>(
             Exercise(name = "Push-ups", desc = "Start in a plank position with your hands and feet on the ground, lower your body towards the ground by bending your elbows, and push back up.", id = 0),
             Exercise(name = "Squats", desc = "Stand with feet hip-width apart, lower down into a sitting position while keeping your back straight, and return to standing.", id = 1),
             Exercise(name = "Sit-ups", desc = "Lie on your back with your knees bent, lift your upper body towards your knees and then return to lying flat.", id = 2),
@@ -53,7 +54,7 @@ abstract class AppDatabase: RoomDatabase() {
             Exercise(name = "Lunges", desc = "Take a big step forward with one foot, bending both knees to lower the back knee towards the ground, and return to standing.", id = 19)
         )
 
-        val workout1 = listOf(
+        val workout1 = listOf<Exercise>(
             exercises[0], // Push-ups
             exercises[1], // squats
             exercises[19], // Lunges
@@ -66,7 +67,7 @@ abstract class AppDatabase: RoomDatabase() {
             exercises[10] // Hanging leg raises
         )
 
-        val workout2 = listOf(
+        val workout2 = listOf<Exercise>(
             exercises[5], // Jumping Jacks
             exercises[4], // Burpees
             exercises[7], // Jump squats
@@ -79,7 +80,7 @@ abstract class AppDatabase: RoomDatabase() {
             exercises[9] // Plank jack
         )
 
-        val workout3 = listOf(
+        val workout3 = listOf<Exercise>(
             exercises[1], // squats
             exercises[19], // Lunges
             exercises[7], // Jump squats
@@ -98,7 +99,7 @@ abstract class AppDatabase: RoomDatabase() {
         val workout2MutableList = workout2.toMutableList()
         val workout3MutableList = workout3.toMutableList()
 
-        val workouts = listOf(
+        val workouts = listOf<Workout>(
             Workout(name = "Full-body circuit", desc = "Description 1", exercise = workout1MutableList, id = 0),
             Workout(name = "HIIT (High-Intensity Interval Training)", desc = "Description 2", exercise = workout2MutableList, id = 1),
             Workout(name = "Leg-focused routine", desc = "Description 3", exercise = workout3MutableList, id = 2)
@@ -125,13 +126,14 @@ class DataBaseCallback(private val exercises: List<Exercise>, private val workou
         {
             db.execSQL("INSERT INTO exercises (name, desc) VALUES ('${it.name}', '${it.desc}')")
         }
-        /*
+
         workouts.forEach()
         {
-            db.execSQL("INSERT INTO workouts (name, desc, exercises) VALUES ('${it.name}', '${it.desc}', '${it.exercise}')")
+            val gson = Gson()
+            val workoutJson = gson.toJson(it.exercise)
+            db.execSQL("INSERT INTO workouts (name, desc, exercises) VALUES ('${it.name}', '${it.desc}', '$workoutJson')")
         }
 
-         */
     }
 }
 
