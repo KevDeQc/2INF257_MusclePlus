@@ -104,8 +104,11 @@ fun SelectWorkoutScreen()
 
 }*/
 
+typealias UpdateWorkoutTrackerData = (comment: String, exerciseList: List<WorkoutTrackerExerciseList>) -> Unit
+
 @Composable
-fun WorkoutTrackerScreen(workout: Workout) { // WE WILL MAKE IT SO IT PASS A WORKOUT AS PARAMETER TO DISPLAY EACH OF HIS EXERCICES
+fun WorkoutTrackerScreen(workout: Workout, updateWorkoutTrackerData: UpdateWorkoutTrackerData)
+{
 
     var comment by remember { mutableStateOf("") }
 
@@ -116,8 +119,6 @@ fun WorkoutTrackerScreen(workout: Workout) { // WE WILL MAKE IT SO IT PASS A WOR
             exerciseItems = mutableListOf(WorkoutTrackerExerciseItem(weight = 0, rep = 0))
         )
     }.toMutableList()) }
-
-
 
     fun setExerciseList(newList: MutableList<WorkoutTrackerExerciseList>) {
         exerciseList = newList
@@ -130,9 +131,8 @@ fun WorkoutTrackerScreen(workout: Workout) { // WE WILL MAKE IT SO IT PASS A WOR
         val newExerciseList = exerciseList.toMutableList()
         newExerciseList[indexExercise] = exercise.copy(exerciseItems = newExerciseItems)
         setExerciseList(newExerciseList)
+        updateWorkoutTrackerData(comment, exerciseList)
     }
-
-    //////////////
 
     LazyColumn(modifier = Modifier
         .fillMaxSize()
@@ -208,6 +208,7 @@ fun WorkoutTrackerScreen(workout: Workout) { // WE WILL MAKE IT SO IT PASS A WOR
                 value = comment,
                 onValueChange = { newValue ->
                     comment = newValue
+                    updateWorkoutTrackerData(comment, exerciseList)
                 },
                 label = { Text("Comment") },
                 modifier = Modifier.padding(bottom = 100.dp)

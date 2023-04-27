@@ -18,8 +18,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.material.*
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -27,12 +30,16 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.room.Room
 import com.example.musclepluscompose.data.AppDatabase
 import com.example.musclepluscompose.ui.theme.MuscleBlue
 import java.util.concurrent.TimeUnit
 import com.example.musclepluscompose.data.AppViewModel
+import com.example.musclepluscompose.data.Exercise_Done
 import com.example.musclepluscompose.data.Workout
+import com.example.musclepluscompose.data.Workout_Done
+import java.util.Date
 
 class WorkoutTracker : ComponentActivity() {
 
@@ -61,6 +68,14 @@ class WorkoutTracker : ComponentActivity() {
 
             val workout: Workout = viewModel.findWorkout(workoutID)
 
+            var commentValue: String by remember {
+                mutableStateOf("")
+            }
+
+            var exerciseListValue: List<WorkoutTrackerExerciseList> by remember {
+                mutableStateOf(emptyList())
+            }
+
             Column(
                 modifier = Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -70,17 +85,21 @@ class WorkoutTracker : ComponentActivity() {
                     text = "Elapsed Time: ${elapsedTime.value}",
                     style = MaterialTheme.typography.h4
                 )
-                Text(text = "Workout in Progress: ${workout.name}")
+                Text(text = "Workout in Progress: ${workout.name} et ${commentValue}")
                 Spacer(modifier = Modifier.height(16.dp))
                 Box(modifier = Modifier.weight(1f)) {
-                    WorkoutTrackerScreen(workout)
+                    WorkoutTrackerScreen(workout, updateWorkoutTrackerData = { comment, exerciseList ->
+                        commentValue = comment
+                        exerciseListValue = exerciseList
+                    })
                 }
                 Button(
                     onClick = {
 
                         // Stop the TimerService
                         stopService(serviceIntent)
-                        finishWorkout()
+                        println(commentValue)
+                        finishWorkout(commentValue, exerciseListValue, workoutID)
 
                               },
                     colors = ButtonDefaults.buttonColors(
@@ -120,7 +139,18 @@ class WorkoutTracker : ComponentActivity() {
         unregisterReceiver(elapsedTimeReceiver)
     }
 
-    private fun finishWorkout() {
+    private fun finishWorkout(comment: String, exerciseList: List<WorkoutTrackerExerciseList>, workoutID: Int) {
+
+        viewModel.upsertWorkout_Done(Workout_Done(workout_id = workoutID, date = Date(), comment = comment))
+
+        exerciseList.forEach(){
+            var exId = it.id
+
+            it.exerciseItems.forEach(){
+                viewModel.upsertExercise_Done(Exercise_Done(exercise_id = exId, rep = it.rep, weight = it.weight, workout_done_id = 1))
+            }
+        }
+
         Intent(this, MainActivity::class.java).also {
             startActivity(it)
         }
