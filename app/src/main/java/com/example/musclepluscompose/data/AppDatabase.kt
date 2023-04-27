@@ -91,7 +91,7 @@ interface Workout_DoneDao{
     fun getAll(): Flow<List<Workout_Done>>
 
     @Query("SELECT * FROM workouts_done ORDER BY id DESC LIMIT 1")
-    fun getLatestWorkoutDone(): Workout_Done
+    fun getLatestWorkoutDone(): Workout_Done?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(workout_done: Workout_Done)
