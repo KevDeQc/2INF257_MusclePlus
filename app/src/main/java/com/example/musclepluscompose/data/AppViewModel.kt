@@ -4,11 +4,9 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.forEach
 import kotlinx.coroutines.launch
-import java.time.Instant
-import java.util.Date
+import java.time.ZonedDateTime
+import java.util.*
 
 class AppViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -113,19 +111,23 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
 
     val allExercise_Done: Flow<List<Exercise_Done>> = exercise_doneDao.getAll()
 
-    fun getAllExerciseDoneInTimeById(exercise_id: Int, timeScope : Int) : List<Exercise_Done>{
+    fun getAllExerciseDoneByExerciseId(exercise_id : Int) : List<Exercise_Done>{
+        return exercise_doneDao.getAllExerciseDoneByExerciseId(exercise_id)
+    }
 
-        val currentTime = Date.from(Instant.now()).time
-        val maxTime = currentTime - (timeScope * 86400).toLong()
+    fun getAllExerciseDoneInTimeById(exercise_id: Int, timeScope : Int) : List<Pair<Exercise_Done, Date>>{
 
 
+        val now = ZonedDateTime.now()
+        val maxTime = now.plusDays(-timeScope.toLong())
 
-        val result = mutableListOf<Exercise_Done>()
-        val temp = exercise_doneDao.getAllExerciseDoneByExerciseId(exercise_id)
+
+        val result = mutableListOf<Pair<Exercise_Done, Date>>()
+        val temp = getAllExerciseDoneByExerciseId(exercise_id)
         temp.forEach { item ->
             val date = getWorkoutDoneById(item.workout_done_id).date
-            if (date.time > maxTime){
-                result.add(item)
+            if (date.time > maxTime.toInstant().toEpochMilli()){
+                result.add(Pair(item, date))
             }
         }
 

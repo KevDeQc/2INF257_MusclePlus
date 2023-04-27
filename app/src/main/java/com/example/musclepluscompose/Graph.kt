@@ -1,9 +1,6 @@
 package com.example.musclepluscompose
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.*
-import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -25,11 +22,17 @@ import kotlin.math.roundToInt
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.runtime.mutableStateListOf
 
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Path
+import java.text.SimpleDateFormat
+import java.util.*
 
+
+fun FormatDate(date: Date): String {
+    val simpleDate = SimpleDateFormat("dd/M")
+    return simpleDate.format(date)
+}
 
 @Composable
 fun LineChartWithScaling(dataPoints: List<DataPoint>) {
@@ -65,7 +68,9 @@ fun LineChartWithScaling(dataPoints: List<DataPoint>) {
             ) {
                 // Calculate the x and y scales based on the min and max values
                 val xScale = size.width / (xMax - xMin)
-                val yScale = size.height / (yMax - yMin)
+                var yScale = size.height / (yMax - yMin)
+                if(yScale > 1) yScale = 1f
+
 
                 // Define a blue paint for the line
                 val linePaint = Paint().apply {
@@ -126,6 +131,7 @@ fun LineChartWithScaling(dataPoints: List<DataPoint>) {
                     close()
                 }
 
+
                 drawPath(
                     path = fillPath,
                     brush = Brush.verticalGradient(
@@ -140,26 +146,11 @@ fun LineChartWithScaling(dataPoints: List<DataPoint>) {
                 //remove y duplicate
                 val copyList = dataPoints.distinctBy { it.y }
 
-                // Draw the x-axis labels
-                dataPoints.forEach { point ->
-                    val x = (point.x - xMin) * xScale
-                    val y = size.height + 16.dp.toPx()
-
-                    drawContext.canvas.nativeCanvas.apply {
-                        drawText(
-                            point.x.roundToInt().toString(),
-                            x,
-                            y,
-                            textPaint
-                        )
-                    }
-                }
-
+                //draw y axis labels
                 copyList.forEach{ point ->
 
                     val x1 = -10.dp.toPx()
                     val y1 = ((point.y - yMin) * -yScale) + size.height
-
                     drawContext.canvas.nativeCanvas.apply {
 
                         drawText(
@@ -170,150 +161,25 @@ fun LineChartWithScaling(dataPoints: List<DataPoint>) {
                         )
                     }
                 }
+
+                // Draw the x-axis labels
+                dataPoints.forEach { point ->
+                    val x = (point.x - xMin) * -xScale + size.width
+                    val y = size.height + 16.dp.toPx()
+
+                    drawContext.canvas.nativeCanvas.apply {
+                        drawText(
+                            FormatDate(point.date),
+                            x,
+                            y,
+                            textPaint
+                        )
+                    }
+                }
             }
         }
     }
 }
 
-
-@Composable
-fun LineChart(
-    data: List<Pair<String, Double>> = emptyList(),
-    exercise: Exercise?,
-    timeLapseInDay: Int,
-    modifier: Modifier = Modifier
-) {
-    //graph theme
-    val graphColor = Color.Blue
-    val transparentGraphColor = remember { graphColor.copy(alpha = 0.5f) }
-    val density = LocalDensity.current
-
-    //graph spacing
-    val spacing = 100f
-    val upperValue = remember { (data.maxOfOrNull { it.second }?.plus(1))?.roundToInt() ?: 0 }
-    val lowerValue = remember { (data.minOfOrNull { it.second }?.toInt() ?: 0) }
-
-
-    val textPaint = remember(density) {
-        Paint().apply {
-            color = android.graphics.Color.BLACK
-            textAlign = Paint.Align.CENTER
-            textSize = density.run { 12.sp.toPx() }
-        }
-    }
-
-    //not showing graph if no value was selected
-    if(exercise != null){
-        Column(Modifier.fillMaxSize()) {
-
-            Spacer(
-                Modifier
-                    .fillMaxWidth()
-                    .weight(1f))
-            Column(
-                modifier = Modifier.fillMaxWidth(),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ){
-                Text(text = exercise.name,
-                    textAlign = TextAlign.Center,
-                    fontSize = 20.sp,
-                    fontFamily = FontFamily.Serif)
-            }
-
-            Spacer(
-                Modifier
-                    .fillMaxWidth()
-                    .weight(0.5f))
-
-            Canvas(modifier = modifier.padding(0.dp, 0.dp, 0.dp, 20.dp)) {
-                val spacePerHour = (size.width - spacing) / timeLapseInDay;
-
-                for(i in 0 until timeLapseInDay){
-                    drawContext.canvas.nativeCanvas.apply {
-                        drawText(
-                            i.toString(),
-                            spacing + i * spacePerHour,
-                            size.height,
-                            textPaint
-                        )
-                    }
-                }
-
-                /*
-                (data.indices).forEach { i ->
-                    val hour = data[i].first
-                    drawContext.canvas.nativeCanvas.apply {
-                        drawText(
-                            hour.toString(),
-                            spacing + i * spacePerHour,
-                            size.height,
-                            textPaint
-                        )
-                    }
-                }
-                */
-
-                val priceStep = (upperValue - lowerValue) / 5f
-                (0..5).forEach { i ->
-                    drawContext.canvas.nativeCanvas.apply {
-                        drawText(
-                            round(lowerValue + priceStep * i).toInt().toString(),
-                            30f,
-                            size.height - spacing - i * size.height / 5f,
-                            textPaint
-                        )
-                    }
-                }
-
-                val strokePath = Path().apply {
-                    val height = size.height
-                    data.indices.forEach { i ->
-                        val info = data[i]
-                        val ratio = (info.second - lowerValue) / (upperValue - lowerValue)
-
-                        val x1 = spacing + i * spacePerHour
-                        val y1 = height - spacing - (ratio * height).toFloat()
-
-                        if (i == 0) { moveTo(x1, y1) }
-                        lineTo(x1, y1)
-                    }
-                }
-
-                drawPath(
-                    path = strokePath,
-                    color = graphColor,
-                    style = Stroke(
-                        width = 2.dp.toPx(),
-                        cap = StrokeCap.Round
-                    )
-                )
-
-                val fillPath = strokePath.asAndroidPath().asComposePath().apply {
-                    lineTo(size.width - spacePerHour, size.height - spacing)
-                    lineTo(spacing, size.height - spacing)
-                    close()
-                }
-
-                drawPath(
-                    path = fillPath,
-                    brush = Brush.verticalGradient(
-                        colors = listOf(
-                            transparentGraphColor,
-                            Color.Transparent
-                        ),
-                        endY = size.height - spacing
-                    )
-                )
-
-            }
-
-        }
-
-    }
-
-
-
-}
 
 
