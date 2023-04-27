@@ -149,8 +149,7 @@ class WorkoutTracker : ComponentActivity() {
 
         exerciseList.forEach(){
             var exId = it.id
-
-            println(it)
+            
             it.exerciseItems.forEach(){
                 viewModel.upsertExercise_Done(Exercise_Done(exercise_id = exId, rep = it.rep, weight = it.weight, workout_done_id = workoutDoneId))
             }

@@ -110,7 +110,6 @@ class MainActivity : ComponentActivity() {
                                     "workout" -> navController.navigate(route = Screen.Workout.route)
                                     "stats" -> navController.navigate(route = Screen.Stats.route)
                                     "startWorkout" -> showDialog.value = true
-                                    //"shareTwitter" -> startActivity(getTwitterIntent(this@MainActivity, "Allo"))
                                     "share" -> share()
                                 }
                             })
