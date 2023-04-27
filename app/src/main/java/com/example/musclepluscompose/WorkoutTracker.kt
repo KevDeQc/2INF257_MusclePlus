@@ -87,7 +87,7 @@ class WorkoutTracker : ComponentActivity() {
                     text = "Elapsed Time: ${elapsedTime.value}",
                     style = MaterialTheme.typography.h4
                 )
-                Text(text = "Workout in Progress: ${workout.name} et ${commentValue}")
+                Text(text = "Workout in Progress: ${workout.name}")
                 Spacer(modifier = Modifier.height(16.dp))
                 Box(modifier = Modifier.weight(1f)) {
                     WorkoutTrackerScreen(workout, updateWorkoutTrackerData = { comment, exerciseList ->
