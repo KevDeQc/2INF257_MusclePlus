@@ -97,9 +97,9 @@ class MainActivity : ComponentActivity() {
                                 ),
                                 MenuItem(
                                 id = "share",
-                                title = "Share !",
+                                title = "Share latest workout",
                                 contentDescription = "Share your last workout stats where you want",
-                                icon = Icons.Default.PlayArrow
+                                icon = Icons.Default.Email
                             )
                             ) ,
                             onItemClick = {
