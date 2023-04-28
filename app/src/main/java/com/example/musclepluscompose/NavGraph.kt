@@ -16,7 +16,7 @@ fun SetupNavGraph(navController: NavHostController, viewModel: AppViewModel)
         composable(
             route = Screen.Home.route
         ){
-            HomeScreen()
+            HomeScreen(viewModel)
         }
         composable(
             route = Screen.Exercise.route
@@ -31,7 +31,7 @@ fun SetupNavGraph(navController: NavHostController, viewModel: AppViewModel)
         composable(
             route = Screen.Stats.route
         ){
-            StatsScreen()
+            StatsScreen(viewModel)
         }
         composable(
             route = Screen.SplashScreen.route

@@ -28,81 +28,11 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import java.util.Timer
 import androidx.activity.viewModels
+import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import com.example.musclepluscompose.data.Exercise
 import com.example.musclepluscompose.data.Workout
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-
-@OptIn(ExperimentalFoundationApi::class)
-
-/*
-@Composable
-fun SelectWorkoutScreen()
-{
-
-    var isWorkingOut by remember { mutableStateOf(false) }
-    var expanded by remember { mutableStateOf(false) }
-    var selectedItem by remember { mutableStateOf("Item 1") }
-    val items = listOf("Item 1", "Item 2", "Item 3", "Item 4")
-    //viewModel: AppViewModel
-    //val allWorkouts by viewModel.allWorkout.collectAsState(emptyList())
-
-    if(isWorkingOut)
-    {
-        //WorkoutTrackerScreen()
-    }
-    else
-    {
-        Column {
-            Text(
-                text = "Workout: $selectedItem",
-                modifier = Modifier.padding(16.dp)
-            )
-
-            Box(modifier = Modifier.wrapContentSize(Alignment.TopStart)) {
-                Button(
-                    onClick = { expanded = true },
-                    colors = ButtonDefaults.buttonColors(
-                        backgroundColor = MuscleBlue,
-                        contentColor = MaterialTheme.colors.onPrimary // White
-                    ),
-                )
-                {
-                    Text(text = "Select a workout")
-                }
-
-                DropdownMenu(
-                    expanded = expanded,
-                    onDismissRequest = { expanded = false },
-                    modifier = Modifier.width(IntrinsicSize.Max)
-                ) {
-                    items.forEach { item ->
-                        DropdownMenuItem(onClick = {
-                            selectedItem = item
-                            expanded = false
-                        }) {
-                            Text(text = item)
-                        }
-                    }
-                }
-
-                Row{
-                    Button(
-                        onClick = { isWorkingOut = true },
-                        colors = ButtonDefaults.buttonColors(
-                            backgroundColor = MuscleBlue,
-                            contentColor = MaterialTheme.colors.onPrimary // White
-                        ),
-                    )
-                    {
-                        Text(text = "GO")
-                    }
-                }
-            }
-        }
-    }
-
-}*/
 
 typealias UpdateWorkoutTrackerData = (comment: String, exerciseList: List<WorkoutTrackerExerciseList>) -> Unit
 
@@ -141,7 +71,10 @@ fun WorkoutTrackerScreen(workout: Workout, updateWorkoutTrackerData: UpdateWorko
         .size(
             width = 300.dp,
             height = 2000.dp
-        )) {
+        )
+        .padding(horizontal = 16.dp),
+        horizontalAlignment = CenterHorizontally
+    ) {
         items(exerciseList.size) { indexExercise ->
             val exercise = exerciseList[indexExercise]
             Text(
@@ -191,8 +124,10 @@ fun WorkoutTrackerScreen(workout: Workout, updateWorkoutTrackerData: UpdateWorko
                 onClick = { addItem(indexExercise, weight = 0, rep = 0) },
                 colors = ButtonDefaults.buttonColors(
                     backgroundColor = MuscleBlue,
-                    contentColor = MaterialTheme.colors.onPrimary // White
-                )
+                    contentColor = MaterialTheme.colors.onPrimary
+                ),
+                modifier = Modifier.padding(bottom = 16.dp, top = 8.dp).fillMaxWidth()
+
             )
             {
                 Text("Add Set")
@@ -213,7 +148,7 @@ fun WorkoutTrackerScreen(workout: Workout, updateWorkoutTrackerData: UpdateWorko
                     updateWorkoutTrackerData(comment, exerciseList)
                 },
                 label = { Text("Comment") },
-                modifier = Modifier.padding(bottom = 100.dp)
+                modifier = Modifier.padding(bottom = 100.dp).fillMaxWidth()
             )
         }
     }
