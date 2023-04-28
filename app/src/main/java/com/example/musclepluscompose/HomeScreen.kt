@@ -1,10 +1,10 @@
 package com.example.musclepluscompose
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
+import android.view.animation.OvershootInterpolator
+import android.window.SplashScreen
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -18,191 +18,56 @@ import androidx.compose.ui.unit.dp
 import com.example.musclepluscompose.ui.theme.MuscleBlue
 import androidx.compose.material.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.draw.BlurredEdgeTreatment
-import androidx.compose.ui.draw.blur
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
-import androidx.compose.ui.graphics.BlurEffect
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.sp
+import androidx.compose.ui.semantics.Role.Companion.Image
+import androidx.navigation.NavController
+import androidx.navigation.Navigation
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.example.musclepluscompose.data.AppViewModel
-import com.example.musclepluscompose.data.Exercise_Done
-import com.example.musclepluscompose.data.Workout_Done
-import java.util.concurrent.TimeUnit
-
-fun convertTotalWeight(list : List<Exercise_Done>) : Int{
-
-    var result = 0
-    list.forEach { result += it.weight * it.rep }
-    return result
-}
-
-fun convertTotalReps(list : List<Exercise_Done>) : Int{
-
-    var result = 0
-    list.forEach { result+= it.rep}
-    return result
-}
-
-private fun formatElapsedTime(timeMillis: Long): String {
-    val hours = TimeUnit.MILLISECONDS.toHours(timeMillis)
-    val minutes = TimeUnit.MILLISECONDS.toMinutes(timeMillis) % 60
-    return String.format("%02d:%02d", hours, minutes)
-}
-
-fun convertTotalTime(list : List<Workout_Done>) : String{
-    var result = 0L
-    list.forEach { result += it.time }
-    return formatElapsedTime(result)
-}
-
+import kotlinx.coroutines.delay
 
 @Composable
-fun HomeScreen(viewModel: AppViewModel) {
-
-    val listExercise = viewModel.getAllExerciseInTime(7)
-    val listWorkout = viewModel.getAllWorkoutInTime(7)
-    val totalWeight = convertTotalWeight(listExercise)
-    val totalReps = convertTotalReps(listExercise)
-    val totalWorkout = listWorkout.size
-    val totalTime = convertTotalTime(listWorkout)
-    var commentFromLast : String
-    if(listWorkout.isEmpty()){
-        commentFromLast = ""
-    }
-    else{
-        commentFromLast = listWorkout.last().comment
-    }
+fun HomeScreen() {
 
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-
-        Image(painter = painterResource(id = R.drawable.banner),
-            contentScale = ContentScale.FillWidth,
-            contentDescription = "banner",
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(150.dp)
+        Text(
+            text = "Welcome Back!",
+            //color = MaterialTheme.colors.primary, // Purple
+            color = Color.Black,
+            fontSize = MaterialTheme.typography.h4.fontSize,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(top = 200.dp)
         )
-
-        Box(modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 20.dp, start = 20.dp, end = 20.dp)
-            .background(MuscleBlue, shape = RoundedCornerShape(10.dp))
-            .height(100.dp)
-        ) {
-            Column() {
-                Text(textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth(),
-                    text = "Comment from your last workout", fontWeight = FontWeight.Bold, color = Color.White)
-                Text(textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth(),
-                    text = commentFromLast)
-            }
-
-        }
-
-        Spacer(modifier = Modifier.height(30.dp))
-        
-        Column() {
-            Row(modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 20.dp, start = 20.dp, end = 20.dp)
-                .height(100.dp)
-            ) {
-
-                Box(modifier = Modifier
-                    .weight(0.4f)
-                    .fillMaxHeight()
-                    .background(MuscleBlue, shape = RoundedCornerShape(10.dp))
-                ){
-                    Column() {
-                        Text(textAlign = TextAlign.Center,
-                            modifier = Modifier.fillMaxWidth()
-                                .padding(top = 10.dp, start = 10.dp, end = 10.dp),
-                            fontWeight = FontWeight.Bold,
-                            color = Color.White,
-                            text = "Total weight lifted this week",
-                        )
-                        Text(textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth(),
-                            text = "$totalWeight Kg", fontSize = 30.sp)
-                    }
-
-                }
-
-                Spacer(modifier = Modifier.weight(0.05f))
-
-                Box(modifier = Modifier
-                    .weight(0.4f)
-                    .fillMaxHeight()
-                    .background(MuscleBlue, shape = RoundedCornerShape(10.dp))
-                ){
-                    Column() {
-                        Text(textAlign = TextAlign.Center,
-                            modifier = Modifier.fillMaxWidth()
-                                .padding(top = 10.dp, start = 10.dp, end = 10.dp),
-                            fontWeight = FontWeight.Bold,
-                            color = Color.White,
-                            text = "Total reps done this week",
-                        )
-                        Text(textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth(),
-                            text = "$totalReps", fontSize = 30.sp)
-                    }
-
-                }
-            }
-
-            Row(modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 20.dp, start = 20.dp, end = 20.dp)
-                .height(100.dp)
-            ) {
-
-                Box(modifier = Modifier
-                    .weight(0.4f)
-                    .fillMaxHeight()
-                    .background(MuscleBlue, shape = RoundedCornerShape(10.dp))
-                ){
-                    Column() {
-                        Text(textAlign = TextAlign.Center,
-                            modifier = Modifier.fillMaxWidth()
-                                .padding(top = 10.dp, start = 10.dp, end = 10.dp),
-                            fontWeight = FontWeight.Bold,
-                            color = Color.White,
-                            text = "Total workouts this week",
-                        )
-                        Text(textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth(),
-                            text = "$totalWorkout", fontSize = 30.sp)
-                    }
-
-                }
-                Spacer(modifier = Modifier.weight(0.05f))
-
-                Box(modifier = Modifier
-                    .weight(0.4f)
-                    .fillMaxHeight()
-                    .background(MuscleBlue, shape = RoundedCornerShape(10.dp))
-                ){
-                    Column() {
-                        Text(textAlign = TextAlign.Center,
-                            modifier = Modifier.fillMaxWidth()
-                                .padding(top = 10.dp, start = 10.dp, end = 10.dp),
-                            fontWeight = FontWeight.Bold,
-                            color = Color.White,
-                            text = "Total time worked out this week",
-                        )
-                        Text(textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth(),
-                            text = totalTime, fontSize = 30.sp)
-                    }
-
-                }
-
-            }
-            
-        }
-
-
+        Text(
+            text = "No Pain, no Gain!",
+            color = MuscleBlue,
+            fontSize = MaterialTheme.typography.h5.fontSize,
+            fontWeight = FontWeight.Bold
+        )
+        Text(
+            text = "Workout Completed this week: 4",
+            color = Color.Black,
+            fontSize = MaterialTheme.typography.h6.fontSize,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(top = 100.dp)
+        )
+        Text(
+            text = "Total time trained this week: 04h23",
+            color = Color.Black,
+            fontSize = MaterialTheme.typography.h6.fontSize,
+            fontWeight = FontWeight.Bold
+        )
     }
+}
+
+@Preview
+@Composable
+fun HomeScreenPreview() {
+    HomeScreen()
 }
