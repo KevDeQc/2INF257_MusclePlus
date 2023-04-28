@@ -1,12 +1,9 @@
 package com.example.musclepluscompose
 
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -15,6 +12,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
@@ -82,6 +80,8 @@ fun ExerciseScreen(viewModel: AppViewModel) {
                                 fontWeight = FontWeight.Bold
                             )
                             Text(exercise.desc)
+                            
+                            //Image(painter = painterResource(id = R.drawable.barbell_rows), contentDescription = "barbell")
                         }
                         IconButton(onClick = { viewModel.deleteExercise(exercise) }) {
                             Icon(

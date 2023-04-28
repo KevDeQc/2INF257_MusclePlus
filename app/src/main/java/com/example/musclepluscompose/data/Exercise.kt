@@ -8,5 +8,6 @@ data class Exercise(
 
     val name : String,
     val desc : String,
+    val imageId : Int,
     @PrimaryKey(autoGenerate = true) val id : Int = 0,
 )
