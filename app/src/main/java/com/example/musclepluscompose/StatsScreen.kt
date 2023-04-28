@@ -173,7 +173,9 @@ fun StatsScreen(viewModel: AppViewModel) {
             val data = mutableListOf<DataPoint>()
 
             test.forEachIndexed { index, item ->
-                data.add(DataPoint(index.toFloat(), item.first.rep.toFloat(), item.second))
+                if(item.first.rep > 0){
+                    data.add(DataPoint(index.toFloat(), item.first.rep.toFloat(), item.second))
+                }
             }
 
             if(data.isEmpty()){
