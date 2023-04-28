@@ -69,7 +69,7 @@ fun LineChartWithScaling(dataPoints: List<DataPoint>) {
                 // Calculate the x and y scales based on the min and max values
                 val xScale = size.width / (xMax - xMin)
                 var yScale = size.height / (yMax - yMin)
-                if(yScale < 1) yScale = size.height / 2
+                if(yScale == 1f/0f) yScale = 1f
 
 
                 // Define a blue paint for the line
