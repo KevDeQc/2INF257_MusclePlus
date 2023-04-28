@@ -184,7 +184,7 @@ fun StatsScreen(viewModel: AppViewModel) {
                 }
             }
 
-            if(data.isEmpty()){
+            if(data.isEmpty() || data.size == 1){
                 Text(
                     text = "No ${selectedExercise?.name ?: "exercise"} have been completed.",
                     fontSize = 24.sp,
