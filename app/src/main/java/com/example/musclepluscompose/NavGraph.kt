@@ -11,7 +11,7 @@ fun SetupNavGraph(navController: NavHostController, viewModel: AppViewModel)
  {
     NavHost(
         navController = navController,
-        startDestination = Screen.SplashScreen.route
+        startDestination = Screen.Home.route
     ){
         composable(
             route = Screen.Home.route
@@ -32,11 +32,6 @@ fun SetupNavGraph(navController: NavHostController, viewModel: AppViewModel)
             route = Screen.Stats.route
         ){
             StatsScreen(viewModel)
-        }
-        composable(
-            route = Screen.SplashScreen.route
-        ){
-            AnimatedSplashScreen(navController = navController)
         }
     }
 }

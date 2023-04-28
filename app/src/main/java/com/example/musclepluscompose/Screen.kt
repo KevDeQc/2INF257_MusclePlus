@@ -5,5 +5,4 @@ sealed class Screen( val route: String){
     object Exercise: Screen(route = "exercise_screen")
     object Workout: Screen(route = "workout_screen")
     object Stats: Screen(route = "stats_screen")
-    object SplashScreen: Screen(route = "splash_screen")
 }
