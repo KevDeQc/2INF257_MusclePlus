@@ -12,6 +12,7 @@ import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -32,9 +33,11 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.musclepluscompose.data.AppViewModel
 import com.example.musclepluscompose.data.Workout
+import com.example.musclepluscompose.ui.theme.MuscleBlue
 import com.example.musclepluscompose.ui.theme.MusclePlusComposeTheme
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.time.format.TextStyle
 import java.util.concurrent.TimeUnit
 
 
@@ -107,9 +110,9 @@ class MainActivity : ComponentActivity() {
                                 ),
                                 MenuItem(
                                 id = "share",
-                                title = "Share !",
+                                title = "Share latest workout",
                                 contentDescription = "Share your last workout stats where you want",
-                                icon = Icons.Default.PlayArrow
+                                icon = Icons.Default.Email
                             )
                             ) ,
                             onItemClick = {
@@ -163,9 +166,20 @@ class MainActivity : ComponentActivity() {
                                                 value = selectedItem?.name ?: "No workout chosen",
                                                 onValueChange = {},
                                                 modifier = Modifier
-                                                    .fillMaxWidth(),
-                                                //.clickable(onClick = { expanded = true }) // Doesn't work?
+                                                    .fillMaxWidth()
+                                                    .clickable(onClick = { expanded = true }),
+                                                enabled = false,
                                                 readOnly = true,
+                                                colors = TextFieldDefaults.outlinedTextFieldColors(
+                                                    disabledTextColor = LocalContentColor.current.copy(LocalContentAlpha.current),
+                                                    backgroundColor = Color.Transparent,
+                                                    disabledBorderColor = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.disabled),
+                                                    disabledLabelColor = MaterialTheme.colors.onSurface.copy(ContentAlpha.medium),
+                                                ),
+                                                trailingIcon = {
+                                                    Icon(Icons.Default.ArrowDropDown, "contentDescription")
+                                                        //Modifier.clickable { expanded = !expanded })
+                                                }
                                             )
 
                                             DropdownMenu(
@@ -186,35 +200,22 @@ class MainActivity : ComponentActivity() {
                                                 }
                                             }
 
-                                            Row(
-                                                modifier = Modifier
-                                                    .fillMaxWidth()
-                                                    .padding(top = 8.dp),
-                                                horizontalArrangement = Arrangement.SpaceBetween,
-                                                verticalAlignment = Alignment.CenterVertically
-                                            ) {
-                                                Button(
-                                                    onClick = { expanded = true },
-                                                    modifier = Modifier
-                                                        .weight(1f)
-                                                        .padding(end = 8.dp)
-                                                ) {
-                                                    Text(text = "Open List")
-                                                }
-                                                Button(
-                                                    onClick = {
-                                                        val getId: Int = selectedItem?.id ?:0
+                                            Button(
+                                                onClick = {
+                                                    val getId: Int = selectedItem?.id ?:0
 
-                                                        if(getId != 0){
-                                                            startWorkoutActivity(getId)
-                                                        }
-                                                    },
-                                                    modifier = Modifier
-                                                        .weight(1f)
-                                                        .padding(start = 8.dp)
-                                                ) {
-                                                    Text(text = "Start")
-                                                }
+                                                    if(getId != 0){
+                                                        startWorkoutActivity(getId)
+                                                    }
+                                                },
+                                                modifier = Modifier
+                                                    .fillMaxWidth(),
+                                                colors = ButtonDefaults.buttonColors(
+                                                    backgroundColor = MuscleBlue,
+                                                    contentColor = MaterialTheme.colors.onPrimary // White
+                                                )
+                                            ) {
+                                                Text(text = "Start")
                                             }
                                         }
                                     }

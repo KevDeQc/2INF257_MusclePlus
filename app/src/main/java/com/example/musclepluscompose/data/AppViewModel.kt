@@ -3,13 +3,10 @@ package com.example.musclepluscompose.data
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.count
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.firstOrNull
-import kotlinx.coroutines.flow.forEach
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import java.time.ZonedDateTime
+import java.util.*
 import kotlinx.coroutines.runBlocking
 
 class AppViewModel(application: Application) : AndroidViewModel(application) {
@@ -49,6 +46,11 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    // should use coroutine
+    fun getWorkoutById(id : Int) : Workout{
+        return workoutDao.getWorkoutById(id)
+    }
+
 //-------- Exercise -------
 
     val allExercise: Flow<List<Exercise>> = exerciseDao.getAll()
@@ -81,6 +83,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
 
     val allWorkout_Done: Flow<List<Workout_Done>> = workout_doneDao.getAll()
 
+
     fun getLastWorkoutDone(): Int{
         return workout_doneDao.getLatestWorkoutDone()?.id ?: 0
     }
@@ -90,7 +93,29 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         return workout_doneDao.getWorkoutDoneById(id)
     }
 
-    fun insertWorkout_Done(workout_done: Workout_Done){
+    fun getWorkoutDoneByIdTom(id : Int) : Workout_Done{
+        return workout_doneDao.getWorkoutDoneByIdTom(id)
+    }
+
+    fun getAllWorkoutInTime(timeScope: Int) : List<Workout_Done>{
+        val now = ZonedDateTime.now()
+        val maxTime = now.plusDays(-timeScope.toLong())
+
+
+        val result = mutableListOf<Workout_Done>()
+        val copy = workout_doneDao.getAllNoFlow()
+
+        copy.forEach { item ->
+            val date = item.date
+            if (date.time > maxTime.toInstant().toEpochMilli()){
+                result.add(item)
+            }
+        }
+        return result
+    }
+
+
+        fun insertWorkout_Done(workout_done: Workout_Done){
         viewModelScope.launch {
             workout_doneDao.insert(workout_done)
         }
@@ -120,6 +145,48 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
 //-------- Exercise Done -------
 
     val allExercise_Done: Flow<List<Exercise_Done>> = exercise_doneDao.getAll()
+
+    fun getAllExerciseDoneByExerciseId(exercise_id : Int) : List<Exercise_Done>{
+        return exercise_doneDao.getAllExerciseDoneByExerciseId(exercise_id)
+    }
+
+    fun getAllExerciseDoneInTimeById(exercise_id: Int, timeScope : Int) : List<Pair<Exercise_Done, Date>>{
+
+
+        val now = ZonedDateTime.now()
+        val maxTime = now.plusDays(-timeScope.toLong())
+
+
+        val result = mutableListOf<Pair<Exercise_Done, Date>>()
+        val temp = getAllExerciseDoneByExerciseId(exercise_id)
+        temp.forEach { item ->
+            val date = getWorkoutDoneByIdTom(item.workout_done_id).date
+            if (date.time > maxTime.toInstant().toEpochMilli()){
+                result.add(Pair(item, date))
+            }
+        }
+
+        return result
+    }
+
+    fun getAllExerciseInTime(timeScope: Int) : List<Exercise_Done>{
+        val now = ZonedDateTime.now()
+        val maxTime = now.plusDays(-timeScope.toLong())
+
+
+        val result = mutableListOf<Exercise_Done>()
+        val copy = exercise_doneDao.getAllNoFlow()
+
+        copy.forEach { item ->
+            val date = getWorkoutDoneByIdTom(item.workout_done_id).date
+            if (date.time > maxTime.toInstant().toEpochMilli()){
+                result.add(item)
+            }
+
+        }
+
+        return result
+    }
 
     fun insertExercise_Done(exercise_done: Exercise_Done){
         viewModelScope.launch {

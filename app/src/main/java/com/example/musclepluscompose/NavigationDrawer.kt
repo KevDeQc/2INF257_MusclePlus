@@ -36,12 +36,12 @@ fun DrawerHeader() {
                 contentDescription = "App Icon",
                 modifier = Modifier.size(100.dp)
             )
-            Text(
+            /*Text(
                 text = "Don't let your dreams be dreams!",
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(start = 16.dp)
-            )
+            )*/
         }
     }
 }
