@@ -24,6 +24,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.musclepluscompose.data.AppViewModel
 import com.example.musclepluscompose.data.Workout
+import com.example.musclepluscompose.ui.theme.MuscleBlue
 import com.example.musclepluscompose.ui.theme.MusclePlusComposeTheme
 import kotlinx.coroutines.launch
 import java.time.format.TextStyle
@@ -198,7 +199,11 @@ class MainActivity : ComponentActivity() {
                                                     }
                                                 },
                                                 modifier = Modifier
-                                                    .fillMaxWidth()
+                                                    .fillMaxWidth(),
+                                                colors = ButtonDefaults.buttonColors(
+                                                    backgroundColor = MuscleBlue,
+                                                    contentColor = MaterialTheme.colors.onPrimary // White
+                                                )
                                             ) {
                                                 Text(text = "Start")
                                             }
