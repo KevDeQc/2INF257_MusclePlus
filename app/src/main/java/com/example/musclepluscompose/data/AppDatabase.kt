@@ -176,6 +176,8 @@ interface Workout_DoneDao{
 
     @Query("SELECT * FROM workouts_done")
     fun getAll(): Flow<List<Workout_Done>>
+    @Query("SELECT * FROM workouts_done")
+    fun getAllNoFlow(): List<Workout_Done>
 
     @Query("SELECT * FROM workouts_done ORDER BY id DESC LIMIT 1")
     fun getLatestWorkoutDone(): Workout_Done?
@@ -205,6 +207,10 @@ interface Exercise_DoneDao{
 
     @Query("SELECT * FROM exercises_done")
     fun getAll(): Flow<List<Exercise_Done>>
+
+    @Query("SELECT * FROM exercises_done")
+    fun getAllNoFlow(): List<Exercise_Done>
+
 
     @Query("SELECT * FROM exercises_done WHERE exercise_id =:exercise_id")
     fun getAllExerciseDoneByExerciseId(exercise_id : Int) : List<Exercise_Done>
