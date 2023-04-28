@@ -103,14 +103,17 @@ fun StatsScreen(viewModel: AppViewModel) {
                     .onGloballyPositioned { coordinates ->
                         //This value is used to assign to the DropDown the same width
                         textFiledSize = coordinates.size.toSize()
-                    },
+                    }
+                    .clickable(onClick = { expanded = true }),
                 label = { Text("Choose exercise") },
+                colors = TextFieldDefaults.outlinedTextFieldColors(
+                    disabledTextColor = LocalContentColor.current.copy(LocalContentAlpha.current),
+                    backgroundColor = Color.Transparent,
+                    disabledBorderColor = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.disabled),
+                    disabledLabelColor = MaterialTheme.colors.onSurface.copy(ContentAlpha.medium),
+                ),
                 trailingIcon = {
-                    Icon(
-                        icon,
-                        "contentDescription",
-                        Modifier.clickable { expanded = !expanded }
-                    )
+                    Icon(icon, "contentDescription",)
                 },
                 enabled = false
             )
@@ -144,11 +147,16 @@ fun StatsScreen(viewModel: AppViewModel) {
                     .onGloballyPositioned { coordinates ->
                         //This value is used to assign to the DropDown the same width
                         textFiledSize1 = coordinates.size.toSize()
-                    },
+                    }
+                    .clickable(onClick = { expanded1 = true }),
+                colors = TextFieldDefaults.outlinedTextFieldColors(
+                    disabledTextColor = LocalContentColor.current.copy(LocalContentAlpha.current),
+                    backgroundColor = Color.Transparent,
+                    disabledBorderColor = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.disabled),
+                    disabledLabelColor = MaterialTheme.colors.onSurface.copy(ContentAlpha.medium),
+                ),
                 label = { Text("Time period") },
-                trailingIcon = {
-                    Icon(icon1, "contentDescription",
-                        Modifier.clickable { expanded1 = !expanded1 })
+                trailingIcon = { Icon(icon1, "contentDescription",)
                 }
             )
             DropdownMenu(
