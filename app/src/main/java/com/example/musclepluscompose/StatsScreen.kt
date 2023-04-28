@@ -75,25 +75,7 @@ fun StatsScreen(viewModel: AppViewModel) {
 
 
     //debug values
-    /*
-    val exercise1 = Exercise("Test", "ceci est un test", 1)
-    viewModel.upsertExercise(exercise1)
-    viewModel.upsertWorkout(Workout("WorkoutTest", "ceci est un test", mutableListOf(exercise1, exercise1, exercise1), 1))
-    viewModel.upsertWorkout_Done(Workout_Done(1, Date(), "aujourd'hui", 1))
-    viewModel.upsertExercise_Done(Exercise_Done(1, 10, 100, 1))
 
-    viewModel.upsertWorkout_Done(Workout_Done(1, Date(1682558321000), "04/27", 2))
-    viewModel.upsertExercise_Done(Exercise_Done(1, 10, 100, 2))
-
-    viewModel.upsertWorkout_Done(Workout_Done(1, Date(1682058321000), "04/21", 3))
-    viewModel.upsertExercise_Done(Exercise_Done(1, 12, 100, 3))
-
-    viewModel.upsertWorkout_Done(Workout_Done(1, Date(1680052721000), "03/28", 4))
-    viewModel.upsertExercise_Done(Exercise_Done(1, 40, 100, 4))
-
-    viewModel.upsertWorkout_Done(Workout_Done(1, Date(1674879692000), "01/27", 5))
-    viewModel.upsertExercise_Done(Exercise_Done(1, 50, 100, 5))
-     */
 
 
     Column(
