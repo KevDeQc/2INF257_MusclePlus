@@ -43,7 +43,7 @@ fun ExerciseScreen(viewModel: AppViewModel) {
                     isEditing = false
                 })
         } else {
-            EditExerciseScreen(exercise = Exercise("", ""),
+            EditExerciseScreen(exercise = Exercise("", "", R.drawable.bench_press),
                 onDismiss = { isEditing = false },
                 onSave = { modifiedExercise ->
                     viewModel.upsertExercise(modifiedExercise)
@@ -81,7 +81,7 @@ fun ExerciseScreen(viewModel: AppViewModel) {
                             )
                             Text(exercise.desc)
                             
-                            //Image(painter = painterResource(id = R.drawable.barbell_rows), contentDescription = "barbell")
+                            Image(painter = painterResource(id = exercise.imageId), contentDescription = "exercise image")
                         }
                         IconButton(onClick = { viewModel.deleteExercise(exercise) }) {
                             Icon(
@@ -169,7 +169,7 @@ fun EditExerciseScreen(
                     contentColor = MaterialTheme.colors.onPrimary // White
                 ),
                 onClick = {
-                    onSave(exercise.copy(name = name.text, desc = desc.text))
+                    onSave(exercise.copy(name = name.text, desc = desc.text, imageId = R.drawable.barbell_rows))
                 }
 
             ) {
