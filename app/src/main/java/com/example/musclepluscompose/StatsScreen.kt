@@ -106,10 +106,15 @@ fun StatsScreen(viewModel: AppViewModel) {
                     },
                 label = { Text("Choose exercise") },
                 trailingIcon = {
-                    Icon(icon, "contentDescription",
-                        Modifier.clickable { expanded = !expanded })
-                }
+                    Icon(
+                        icon,
+                        "contentDescription",
+                        Modifier.clickable { expanded = !expanded }
+                    )
+                },
+                enabled = false
             )
+
             DropdownMenu(
                 expanded = expanded,
                 onDismissRequest = { expanded = false },
@@ -133,6 +138,7 @@ fun StatsScreen(viewModel: AppViewModel) {
             OutlinedTextField(
                 value = selectedItem1,
                 onValueChange = { selectedItem1 = it },
+                enabled = false,
                 modifier = Modifier
                     .fillMaxWidth()
                     .onGloballyPositioned { coordinates ->
