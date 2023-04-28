@@ -13,8 +13,10 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
 import com.example.musclepluscompose.data.*
 import java.util.Date
@@ -174,7 +176,18 @@ fun StatsScreen(viewModel: AppViewModel) {
                 data.add(DataPoint(index.toFloat(), item.first.rep.toFloat(), item.second))
             }
 
-            LineChartWithScaling(dataPoints = data)
+            if(data.isEmpty()){
+                Text(
+                    text = "No ${selectedExercise?.name ?: "exercise"} have been completed.",
+                    fontSize = 24.sp,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+            }
+            else{
+                LineChartWithScaling(dataPoints = data)
+            }
         }
     }
 }
