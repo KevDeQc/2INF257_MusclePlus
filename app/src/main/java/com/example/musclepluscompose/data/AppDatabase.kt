@@ -32,26 +32,26 @@ abstract class AppDatabase: RoomDatabase() {
         private var INSTANCE: AppDatabase? = null
 
         val exercises = listOf<Exercise>(
-            Exercise(name = "Push-ups", desc = "Start in a plank position with your hands and feet on the ground, lower your body towards the ground by bending your elbows, and push back up.", id = 0),
-            Exercise(name = "Squats", desc = "Stand with feet hip-width apart, lower down into a sitting position while keeping your back straight, and return to standing.", id = 1),
-            Exercise(name = "Sit-ups", desc = "Lie on your back with your knees bent, lift your upper body towards your knees and then return to lying flat.", id = 2),
-            Exercise(name = "Plank ", desc = "Start in a push-up position but with forearms on the ground, hold the position while keeping your body straight.", id = 3),
-            Exercise(name = "Burpees", desc = "Start in a standing position, drop down into a plank position, do a push-up, jump back up to a standing position, and jump with arms overhead.", id = 4),
-            Exercise(name = "Jumping Jacks", desc = "Jump with feet apart while raising arms overhead, jump again and return to starting position with feet together and arms at your sides.", id = 5),
-            Exercise(name = "Mountain climbers", desc = "Start in a plank position, bring your knee to your chest, alternate legs quickly while keeping your back straight.", id = 6),
-            Exercise(name = "Jump squats", desc = "Stand with feet hip-width apart, lower down into a squat position and jump up while keeping arms overhead.", id = 7),
-            Exercise(name = "Plank jacks", desc = "Start in a plank position, jump feet apart and back together while keeping your body straight.", id = 8),
-            Exercise(name = "Side plank", desc = "Start in a plank position but with one forearm on the ground and the other hand on your hip, hold the position.", id = 9),
-            Exercise(name = "Hanging leg raises", desc = "Hang from a bar and raise your legs straight up towards the bar.", id = 10),
-            Exercise(name = "Bicep curls", desc = "Stand with feet hip-width apart, hold weights in each hand, and curl weights towards your shoulders.", id = 11),
-            Exercise(name = "Tricep extensions", desc = "Stand with feet hip-width apart, hold weights above your head, and lower weights behind your head by bending elbows.", id = 12),
-            Exercise(name = "Shoulder press", desc = "Stand with feet hip-width apart, hold weights at shoulder height, and push weights overhead.", id = 13),
-            Exercise(name = "Side lunges", desc = "Take a big step to the side with one foot, bending the knee and keeping the other leg straight, and return to standing.", id = 14),
-            Exercise(name = "High jumps", desc = "Jump as high as possible, lifting knees towards chest while in the air.", id = 15),
-            Exercise(name = "Long jumps", desc = "Jump forward as far as possible while keeping feet together.", id = 16),
-            Exercise(name = "Skipping", desc = "Jump with feet together, lifting one knee at a time towards your chest.", id = 17),
-            Exercise(name = "Box jumps", desc = "Jump onto a box or bench and step back down, then repeat.", id = 18),
-            Exercise(name = "Lunges", desc = "Take a big step forward with one foot, bending both knees to lower the back knee towards the ground, and return to standing.", id = 19)
+            Exercise(name = "Push-ups", desc = "Start in a plank position with your hands and feet on the ground, lower your body towards the ground by bending your elbows, and push back up.", id = 1),
+            Exercise(name = "Squats", desc = "Stand with feet hip-width apart, lower down into a sitting position while keeping your back straight, and return to standing.", id = 2),
+            Exercise(name = "Sit-ups", desc = "Lie on your back with your knees bent, lift your upper body towards your knees and then return to lying flat.", id = 3),
+            Exercise(name = "Plank ", desc = "Start in a push-up position but with forearms on the ground, hold the position while keeping your body straight.", id = 4),
+            Exercise(name = "Burpees", desc = "Start in a standing position, drop down into a plank position, do a push-up, jump back up to a standing position, and jump with arms overhead.", id = 5),
+            Exercise(name = "Jumping Jacks", desc = "Jump with feet apart while raising arms overhead, jump again and return to starting position with feet together and arms at your sides.", id = 6),
+            Exercise(name = "Mountain climbers", desc = "Start in a plank position, bring your knee to your chest, alternate legs quickly while keeping your back straight.", id = 7),
+            Exercise(name = "Jump squats", desc = "Stand with feet hip-width apart, lower down into a squat position and jump up while keeping arms overhead.", id = 8),
+            Exercise(name = "Plank jacks", desc = "Start in a plank position, jump feet apart and back together while keeping your body straight.", id = 9),
+            Exercise(name = "Side plank", desc = "Start in a plank position but with one forearm on the ground and the other hand on your hip, hold the position.", id = 10),
+            Exercise(name = "Hanging leg raises", desc = "Hang from a bar and raise your legs straight up towards the bar.", id = 11),
+            Exercise(name = "Bicep curls", desc = "Stand with feet hip-width apart, hold weights in each hand, and curl weights towards your shoulders.", id = 12),
+            Exercise(name = "Tricep extensions", desc = "Stand with feet hip-width apart, hold weights above your head, and lower weights behind your head by bending elbows.", id = 13),
+            Exercise(name = "Shoulder press", desc = "Stand with feet hip-width apart, hold weights at shoulder height, and push weights overhead.", id = 14),
+            Exercise(name = "Side lunges", desc = "Take a big step to the side with one foot, bending the knee and keeping the other leg straight, and return to standing.", id = 15),
+            Exercise(name = "High jumps", desc = "Jump as high as possible, lifting knees towards chest while in the air.", id = 16),
+            Exercise(name = "Long jumps", desc = "Jump forward as far as possible while keeping feet together.", id = 17),
+            Exercise(name = "Skipping", desc = "Jump with feet together, lifting one knee at a time towards your chest.", id = 18),
+            Exercise(name = "Box jumps", desc = "Jump onto a box or bench and step back down, then repeat.", id = 19),
+            Exercise(name = "Lunges", desc = "Take a big step forward with one foot, bending both knees to lower the back knee towards the ground, and return to standing.", id = 20)
         )
 
         val workout1 = listOf<Exercise>(
@@ -100,9 +100,9 @@ abstract class AppDatabase: RoomDatabase() {
         val workout3MutableList = workout3.toMutableList()
 
         val workouts = listOf<Workout>(
-            Workout(name = "Full-body circuit", desc = "Description 1", exercise = workout1MutableList, id = 0),
-            Workout(name = "HIIT (High-Intensity Interval Training)", desc = "Description 2", exercise = workout2MutableList, id = 1),
-            Workout(name = "Leg-focused routine", desc = "Description 3", exercise = workout3MutableList, id = 2)
+            Workout(name = "Full-body circuit", desc = "Description 1", exercise = workout1MutableList, id = 1),
+            Workout(name = "HIIT (High-Intensity Interval Training)", desc = "Description 2", exercise = workout2MutableList, id = 2),
+            Workout(name = "Leg-focused routine", desc = "Description 3", exercise = workout3MutableList, id = 3)
         )
 
         fun getDatabase(context: Context): AppDatabase {
