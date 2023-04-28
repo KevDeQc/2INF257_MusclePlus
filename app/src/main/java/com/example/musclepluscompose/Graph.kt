@@ -55,7 +55,7 @@ fun LineChartWithScaling(dataPoints: List<DataPoint>) {
     }
 
     Surface(modifier = Modifier.fillMaxWidth()) {
-        Column(modifier = Modifier.padding(16.dp)) {
+        Column(modifier = Modifier.padding(32.dp)) {
             Text(
                 text = "Line Chart",
                 style = MaterialTheme.typography.h6,
@@ -164,7 +164,8 @@ fun LineChartWithScaling(dataPoints: List<DataPoint>) {
 
                 // Draw the x-axis labels
                 dataPoints.forEach { point ->
-                    val x = (point.x - xMin) * -xScale + size.width
+                    //val x = (point.x - xMin) * -xScale + size.width
+                    val x = (point.x - xMax) * xScale + size.width
                     val y = size.height + 16.dp.toPx()
 
                     drawContext.canvas.nativeCanvas.apply {
