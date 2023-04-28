@@ -10,6 +10,8 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.forEach
 import kotlinx.coroutines.launch
+import java.time.ZonedDateTime
+import java.util.*
 import kotlinx.coroutines.runBlocking
 
 class AppViewModel(application: Application) : AndroidViewModel(application) {
@@ -47,6 +49,11 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch {
             workoutDao.upsert(workout)
         }
+    }
+
+    // should use coroutine
+    fun getWorkoutById(id : Int) : Workout{
+        return workoutDao.getWorkoutById(id)
     }
 
 //-------- Exercise -------
@@ -90,6 +97,10 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         return workout_doneDao.getWorkoutDoneById(id)
     }
 
+    fun getWorkoutDoneByIdTom(id : Int) : Workout_Done{
+        return workout_doneDao.getWorkoutDoneByIdTom(id)
+    }
+
     fun insertWorkout_Done(workout_done: Workout_Done){
         viewModelScope.launch {
             workout_doneDao.insert(workout_done)
@@ -120,6 +131,29 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
 //-------- Exercise Done -------
 
     val allExercise_Done: Flow<List<Exercise_Done>> = exercise_doneDao.getAll()
+
+    fun getAllExerciseDoneByExerciseId(exercise_id : Int) : List<Exercise_Done>{
+        return exercise_doneDao.getAllExerciseDoneByExerciseId(exercise_id)
+    }
+
+    fun getAllExerciseDoneInTimeById(exercise_id: Int, timeScope : Int) : List<Pair<Exercise_Done, Date>>{
+
+
+        val now = ZonedDateTime.now()
+        val maxTime = now.plusDays(-timeScope.toLong())
+
+
+        val result = mutableListOf<Pair<Exercise_Done, Date>>()
+        val temp = getAllExerciseDoneByExerciseId(exercise_id)
+        temp.forEach { item ->
+            val date = getWorkoutDoneByIdTom(item.workout_done_id).date
+            if (date.time > maxTime.toInstant().toEpochMilli()){
+                result.add(Pair(item, date))
+            }
+        }
+
+        return result
+    }
 
     fun insertExercise_Done(exercise_done: Exercise_Done){
         viewModelScope.launch {

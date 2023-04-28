@@ -146,6 +146,9 @@ interface WorkoutDao{
     @Query("SELECT * FROM workouts WHERE id = :id")
     fun getById(id: Int): Workout
 
+    @Query("SELECT * FROM workouts WHERE id =:id")
+    fun getWorkoutById(id : Int) : Workout
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(workout: Workout)
 

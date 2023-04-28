@@ -31,7 +31,7 @@ fun SetupNavGraph(navController: NavHostController, viewModel: AppViewModel)
         composable(
             route = Screen.Stats.route
         ){
-            StatsScreen()
+            StatsScreen(viewModel)
         }
     }
 }
