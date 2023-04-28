@@ -102,8 +102,12 @@ fun ExerciseScreen(viewModel: AppViewModel) {
                                 exercise.name,
                                 fontFamily = FontFamily.Serif,
                                 fontWeight = FontWeight.Bold,
+                                color = Color.DarkGray
                             )
-                            Text(exercise.desc)
+                            Text(
+                                exercise.desc,
+                                color = Color.DarkGray
+                            )
                             
                             Spacer(modifier = Modifier.height(20.dp))
 

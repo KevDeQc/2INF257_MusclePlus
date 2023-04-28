@@ -99,7 +99,7 @@ fun StatsScreen(viewModel: AppViewModel) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White)
+            //.background(Color.White)
             .padding(16.dp),
         verticalArrangement = Arrangement.Center
     ) {
