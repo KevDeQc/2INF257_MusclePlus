@@ -81,7 +81,7 @@ fun HomeScreen(viewModel: AppViewModel) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        Image(painter = painterResource(id = R.drawable.bench_press),
+        Image(painter = painterResource(id = R.drawable.banner),
             contentScale = ContentScale.FillWidth,
             contentDescription = "banner",
             modifier = Modifier
