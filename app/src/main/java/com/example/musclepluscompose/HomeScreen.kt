@@ -1,5 +1,9 @@
 package com.example.musclepluscompose
 
+import android.view.animation.OvershootInterpolator
+import android.window.SplashScreen
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
@@ -14,7 +18,16 @@ import androidx.compose.ui.unit.dp
 import com.example.musclepluscompose.ui.theme.MuscleBlue
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.draw.scale
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.Role.Companion.Image
+import androidx.navigation.NavController
+import androidx.navigation.Navigation
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.example.musclepluscompose.data.AppViewModel
+import kotlinx.coroutines.delay
 
 @Composable
 fun HomeScreen() {
