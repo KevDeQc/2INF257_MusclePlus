@@ -28,6 +28,7 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import java.util.Timer
 import androidx.activity.viewModels
+import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import com.example.musclepluscompose.data.Exercise
 import com.example.musclepluscompose.data.Workout
 import com.google.gson.Gson
@@ -70,7 +71,10 @@ fun WorkoutTrackerScreen(workout: Workout, updateWorkoutTrackerData: UpdateWorko
         .size(
             width = 300.dp,
             height = 2000.dp
-        )) {
+        )
+        .padding(horizontal = 16.dp),
+        horizontalAlignment = CenterHorizontally
+    ) {
         items(exerciseList.size) { indexExercise ->
             val exercise = exerciseList[indexExercise]
             Text(
@@ -120,8 +124,10 @@ fun WorkoutTrackerScreen(workout: Workout, updateWorkoutTrackerData: UpdateWorko
                 onClick = { addItem(indexExercise, weight = 0, rep = 0) },
                 colors = ButtonDefaults.buttonColors(
                     backgroundColor = MuscleBlue,
-                    contentColor = MaterialTheme.colors.onPrimary // White
-                )
+                    contentColor = MaterialTheme.colors.onPrimary
+                ),
+                modifier = Modifier.padding(bottom = 16.dp, top = 8.dp).fillMaxWidth()
+
             )
             {
                 Text("Add Set")
@@ -142,7 +148,7 @@ fun WorkoutTrackerScreen(workout: Workout, updateWorkoutTrackerData: UpdateWorko
                     updateWorkoutTrackerData(comment, exerciseList)
                 },
                 label = { Text("Comment") },
-                modifier = Modifier.padding(bottom = 100.dp)
+                modifier = Modifier.padding(bottom = 100.dp).fillMaxWidth()
             )
         }
     }
