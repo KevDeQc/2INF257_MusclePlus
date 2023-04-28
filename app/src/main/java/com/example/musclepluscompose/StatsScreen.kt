@@ -31,6 +31,11 @@ private fun ConvertToDay(date: Date){
 @Composable
 fun StatsScreen(viewModel: AppViewModel) {
 
+    val type = listOf<String>(
+        "Rep",
+        "Weight",
+        "Volume"
+    )
 
     val timeLapse  = listOf<Pair<String, Int>>(
         Pair("Week", 7),
@@ -50,6 +55,11 @@ fun StatsScreen(viewModel: AppViewModel) {
     var textFiledSize1 by remember { mutableStateOf(Size.Zero) }
     var selectedTimeScope by remember { mutableStateOf<Int?>(null) }
     var selectedItem1 by remember { mutableStateOf("") }
+
+    var expanded2 by remember { mutableStateOf(false)}
+    var textFiledSize2 by remember { mutableStateOf(Size.Zero) }
+    var selectedType by remember { mutableStateOf<String?>(null) }
+    var selectedItem2 by remember { mutableStateOf("") }
 
     val icon1 = if (expanded1) {
         Icons.Filled.KeyboardArrowUp
@@ -179,18 +189,78 @@ fun StatsScreen(viewModel: AppViewModel) {
 
         }
 
+        Column(modifier = Modifier.padding(20.dp, 10.dp)) {
+            OutlinedTextField(
+                value = selectedItem2,
+                onValueChange = { selectedItem2 = it },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .onGloballyPositioned { coordinates ->
+                        //This value is used to assign to the DropDown the same width
+                        textFiledSize2 = coordinates.size.toSize()
+                    }
+                    .clickable(onClick = { expanded2 = true }),
+                label = { Text("Choose Type") },
+                colors = TextFieldDefaults.outlinedTextFieldColors(
+                    disabledTextColor = LocalContentColor.current.copy(LocalContentAlpha.current),
+                    backgroundColor = Color.Transparent,
+                    disabledBorderColor = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.disabled),
+                    disabledLabelColor = MaterialTheme.colors.onSurface.copy(ContentAlpha.medium),
+                ),
+                trailingIcon = {
+                    Icon(icon, "contentDescription",)
+                },
+                enabled = false
+            )
 
-        if(selectedExercise != null && selectedTimeScope != null){
+            DropdownMenu(
+                expanded = expanded2,
+                onDismissRequest = { expanded2 = false },
+                modifier = Modifier
+                    .width(with(LocalDensity.current) { textFiledSize.width.toDp() })
+            ) {
+                type.forEach { label ->
+                    DropdownMenuItem(onClick = {
+                        selectedItem2 = label
+                        selectedType = label
+                        expanded2 = false
+                    }) {
+                        Text(text = label)
+                    }
+                }
+
+            }
+        }
+
+
+        if(selectedExercise != null && selectedTimeScope != null && selectedType != null){
 
             val test = viewModel.getAllExerciseDoneInTimeById(selectedExercise!!.id, selectedTimeScope!!)
 
             val data = mutableListOf<DataPoint>()
 
-            test.forEachIndexed { index, item ->
-                if(item.first.rep > 0){
-                    data.add(DataPoint(index.toFloat(), item.first.rep.toFloat(), item.second))
+            if(selectedItem2 == type[0]){
+                test.forEachIndexed { index, item ->
+                    if(item.first.rep > 0){
+                        data.add(DataPoint(index.toFloat(), item.first.rep.toFloat(), item.second))
+                    }
                 }
             }
+            else if(selectedItem2 == type[1]){
+                test.forEachIndexed { index, item ->
+                    if(item.first.weight > 0){
+                        data.add(DataPoint(index.toFloat(), item.first.weight.toFloat(), item.second))
+                    }
+                }
+            }
+            else if(selectedItem2 == type[2]){
+                test.forEachIndexed { index, item ->
+                    if(item.first.weight > 0 || item.first.rep > 0){
+                        data.add(DataPoint(index.toFloat(), (item.first.weight * item.first.rep).toFloat(), item.second))
+                    }
+                }
+            }
+
 
             if(data.isEmpty() || data.size == 1){
                 Text(
