@@ -157,6 +157,7 @@ interface WorkoutDao{
 
     @Upsert()
     suspend fun upsert(workout: Workout)
+
 }
 
 @Dao
@@ -191,6 +192,9 @@ interface Workout_DoneDao{
     @Query("SELECT * FROM workouts_done WHERE id = :id")
     fun getWorkoutDoneById(id: Int): Workout_Done?
 
+    @Query("SELECT * FROM workouts_done WHERE id =:id")
+    fun getWorkoutDoneByIdTom(id : Int) : Workout_Done
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(workout_done: Workout_Done)
 
@@ -210,6 +214,9 @@ interface Exercise_DoneDao{
 
     @Query("SELECT * FROM exercises_done")
     fun getAll(): Flow<List<Exercise_Done>>
+
+    @Query("SELECT * FROM exercises_done WHERE exercise_id =:exercise_id")
+    fun getAllExerciseDoneByExerciseId(exercise_id : Int) : List<Exercise_Done>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(exercise_done: Exercise_Done)
