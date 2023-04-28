@@ -35,20 +35,20 @@ abstract class AppDatabase: RoomDatabase() {
 
         val exercises = listOf<Exercise>(
             Exercise(name = "Bench Press", desc = "Lie on a bench and lower a barbell towards your chest, then push it back up.", imageId = R.drawable.bench_press,id = 1),
-            Exercise(name = "Squats", desc = "Stand with feet hip-width apart, lower down into a sitting position while keeping your back straight, and return to standing while holding weights.",imageId = R.drawable.bench_press, id = 2),
-            Exercise(name = "Deadlifts", desc = "Stand with feet hip-width apart, bend down to pick up a barbell, then straighten up while holding the weights.",imageId = R.drawable.bench_press, id = 3),
-            Exercise(name = "Barbell Rows", desc = "Bend forward with knees slightly bent and lift a barbell towards your chest, then lower it back down.",imageId = R.drawable.bench_press, id = 4),
-            Exercise(name = "Bicep Curls", desc = "Stand with feet hip-width apart, hold weights in each hand, and curl weights towards your shoulders.",imageId = R.drawable.bench_press, id = 5),
-            Exercise(name = "Tricep Extensions", desc = "Stand with feet hip-width apart, hold weights above your head, and lower weights behind your head by bending elbows.",imageId = R.drawable.bench_press, id = 6),
-            Exercise(name = "Shoulder Press", desc = "Stand with feet hip-width apart, hold weights at shoulder height, and push weights overhead.",imageId = R.drawable.bench_press, id = 7),
-            Exercise(name = "Lateral Raises", desc = "Stand with feet hip-width apart, hold weights at your sides, and lift weights to shoulder height.",imageId = R.drawable.bench_press, id = 8),
-            Exercise(name = "Front Raises", desc = "Stand with feet hip-width apart, hold weights in front of you, and lift weights to shoulder height.",imageId = R.drawable.bench_press, id = 9),
-            Exercise(name = "Hammer Curls", desc = "Stand with feet hip-width apart, hold weights with palms facing each other, and curl weights towards your shoulders.",imageId = R.drawable.bench_press, id = 10),
-            Exercise(name = "Dumbbell Lunges", desc = "Take a big step forward with one foot, bending both knees to lower the back knee towards the ground while holding weights, and return to standing.",imageId = R.drawable.bench_press, id = 11),
-            Exercise(name = "Calf Raises", desc = "Stand with feet hip-width apart on a raised platform, hold weights, and raise your heels up and down.", imageId = R.drawable.bench_press,id = 12),
-            Exercise(name = "Leg Press", desc = "Sit on a leg press machine and push a weight up and down with your legs.",imageId = R.drawable.bench_press, id = 13),
-            Exercise(name = "Incline Bench Press", desc = "Lie on an incline bench and lower a barbell towards your chest, then push it back up.",imageId = R.drawable.bench_press, id = 14),
-            Exercise(name = "Decline Bench Press", desc = "Lie on a decline bench and lower a barbell towards your chest, then push it back up.",imageId = R.drawable.bench_press, id = 15)
+            Exercise(name = "Squats", desc = "Stand with feet hip-width apart, lower down into a sitting position while keeping your back straight, and return to standing while holding weights.",imageId = R.drawable.squats, id = 2),
+            Exercise(name = "Deadlifts", desc = "Stand with feet hip-width apart, bend down to pick up a barbell, then straighten up while holding the weights.",imageId = R.drawable.deadlift, id = 3),
+            Exercise(name = "Barbell Rows", desc = "Bend forward with knees slightly bent and lift a barbell towards your chest, then lower it back down.",imageId = R.drawable.barbell_rows, id = 4),
+            Exercise(name = "Bicep Curls", desc = "Stand with feet hip-width apart, hold weights in each hand, and curl weights towards your shoulders.",imageId = R.drawable.bicep_curls, id = 5),
+            Exercise(name = "Tricep Extensions", desc = "Stand with feet hip-width apart, hold weights above your head, and lower weights behind your head by bending elbows.",imageId = R.drawable.tricep_extension, id = 6),
+            Exercise(name = "Shoulder Press", desc = "Stand with feet hip-width apart, hold weights at shoulder height, and push weights overhead.",imageId = R.drawable.shoulder_press, id = 7),
+            Exercise(name = "Lateral Raises", desc = "Stand with feet hip-width apart, hold weights at your sides, and lift weights to shoulder height.",imageId = R.drawable.lateral_raises, id = 8),
+            Exercise(name = "Front Raises", desc = "Stand with feet hip-width apart, hold weights in front of you, and lift weights to shoulder height.",imageId = R.drawable.front_raise, id = 9),
+            Exercise(name = "Hammer Curls", desc = "Stand with feet hip-width apart, hold weights with palms facing each other, and curl weights towards your shoulders.",imageId = R.drawable.hammer_curls, id = 10),
+            Exercise(name = "Dumbbell Lunges", desc = "Take a big step forward with one foot, bending both knees to lower the back knee towards the ground while holding weights, and return to standing.",imageId = R.drawable.dumbell_lunges, id = 11),
+            Exercise(name = "Calf Raises", desc = "Stand with feet hip-width apart on a raised platform, hold weights, and raise your heels up and down.", imageId = R.drawable.hammer_curls,id = 12),
+            Exercise(name = "Leg Press", desc = "Sit on a leg press machine and push a weight up and down with your legs.",imageId = R.drawable.leg_press, id = 13),
+            Exercise(name = "Incline Bench Press", desc = "Lie on an incline bench and lower a barbell towards your chest, then push it back up.",imageId = R.drawable.incline_bench_press, id = 14),
+            Exercise(name = "Decline Bench Press", desc = "Lie on a decline bench and lower a barbell towards your chest, then push it back up.",imageId = R.drawable.decline_bench_press, id = 15)
         )
 
 

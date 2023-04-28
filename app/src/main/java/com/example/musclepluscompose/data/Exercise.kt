@@ -9,6 +9,6 @@ data class Exercise(
 
     val name : String,
     val desc : String,
-    val imageId : Int = R.drawable.barbell_rows,
+    val imageId : Int = R.drawable.default_exercise,
     @PrimaryKey(autoGenerate = true) val id : Int = 0,
 )
