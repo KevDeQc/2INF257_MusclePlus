@@ -50,7 +50,7 @@ private fun formatElapsedTime(timeMillis: Long): String {
     val hours = TimeUnit.MILLISECONDS.toHours(timeMillis)
     val minutes = TimeUnit.MILLISECONDS.toMinutes(timeMillis) % 60
     return String.format("%02d:%02d", hours, minutes)
-}
+} 
 
 fun convertTotalTime(list : List<Workout_Done>) : String{
     var result = 0L
